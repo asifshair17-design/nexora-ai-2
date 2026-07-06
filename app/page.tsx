@@ -5,9 +5,43 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import PromptBox from "./components/PromptBox";
+import ImageCard from "./components/ImageCard";
 
 export default function Home() {
   const [prompt, setPrompt] = useState("");
+  const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleGenerate() {
+    if (!prompt.trim()) {
+      alert("Please enter a prompt.");
+      return;
+    }
+
+    setLoading(true);
+    setImage("");
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+
+      const data = await response.json();
+
+      setImage(data.image);
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <>
@@ -46,9 +80,18 @@ export default function Home() {
             <PromptBox
               prompt={prompt}
               setPrompt={setPrompt}
+              loading={loading}
+              onGenerate={handleGenerate}
             />
 
           </div>
+
+          {image && (
+            <ImageCard
+              image={image}
+              prompt={prompt}
+            />
+          )}
 
         </main>
 
