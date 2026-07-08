@@ -29,14 +29,13 @@ export default function Navbar() {
     setLoggedIn(!!user);
   }
 
-async function logout() {
-  await supabase.auth.signOut();
-  window.location.href = "/";
-}
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  }
 
   return (
     <nav className="w-full h-16 border-b border-gray-800 bg-black flex items-center justify-between px-8">
-
       <Link
         href="/"
         className="text-2xl font-bold text-purple-500"
@@ -45,7 +44,6 @@ async function logout() {
       </Link>
 
       <div className="flex items-center gap-4">
-
         <Link
           href="/"
           className="px-5 py-2 rounded-xl border border-gray-700 hover:bg-gray-800 transition"
@@ -53,11 +51,30 @@ async function logout() {
           Home
         </Link>
 
-        <button className="px-5 py-2 rounded-xl border border-gray-700 hover:bg-gray-800 transition">
+        <Link
+          href="/pricing"
+          className="px-5 py-2 rounded-xl border border-gray-700 hover:bg-gray-800 transition"
+        >
           Pricing
-        </button>
+        </Link>
 
-        {!loggedIn ? (
+        {loggedIn ? (
+          <>
+            <Link
+              href="/dashboard"
+              className="px-5 py-2 rounded-xl border border-gray-700 hover:bg-gray-800 transition"
+            >
+              Dashboard
+            </Link>
+
+            <button
+              onClick={logout}
+              className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
           <>
             <Link
               href="/login"
@@ -73,23 +90,8 @@ async function logout() {
               Sign Up
             </Link>
           </>
-        ) : (
-          <>
-            <button className="px-5 py-2 rounded-xl border border-gray-700 hover:bg-gray-800 transition">
-              Dashboard
-            </button>
-
-            <button
-              onClick={logout}
-              className="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
-          </>
         )}
-
       </div>
-
     </nav>
   );
 }
