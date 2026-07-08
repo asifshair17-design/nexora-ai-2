@@ -20,7 +20,6 @@ export default function HistoryCard({
 
   return (
     <div className="rounded-2xl overflow-hidden bg-gray-900 border border-gray-800">
-
       <img
         src={image}
         alt={prompt}
@@ -28,13 +27,11 @@ export default function HistoryCard({
       />
 
       <div className="p-4">
-
         <p className="text-sm text-gray-400 line-clamp-2 mb-4">
           {prompt}
         </p>
 
         <div className="flex gap-2">
-
           <button
             onClick={copyPrompt}
             className="flex-1 rounded-lg bg-blue-600 py-2 hover:bg-blue-700"
@@ -58,11 +55,8 @@ export default function HistoryCard({
           >
             🗑
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 }

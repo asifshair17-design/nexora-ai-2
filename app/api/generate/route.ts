@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { prompt } = await req.json();
+    const { prompt, style, size } = await req.json();
 
     if (!prompt) {
       return NextResponse.json(
@@ -11,9 +11,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const image = `https://image.pollinations.ai/prompt/${encodeURIComponent(
-      prompt
-    )}`;
+    // Enhance the prompt with the selected style
+    const finalPrompt = `${prompt}, ${style} style`;
+
+    // (We'll use 'size' later when we move to a model that supports it.)
+    console.log("Requested size:", size);
+
+   const image = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
 
     return NextResponse.json({ image });
   } catch (error) {

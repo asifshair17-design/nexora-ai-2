@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 type ImageCardProps = {
   image: string;
   prompt: string;
@@ -13,11 +17,12 @@ export default function ImageCard({
       <div className="rounded-3xl overflow-hidden border border-gray-800 bg-gray-900">
 
         <img
-          src={image}
-          alt={prompt}
-          className="w-full"
-        />
-
+  key={image}
+  src={image}
+  alt={prompt}
+  className="w-full rounded-t-3xl"
+  loading="eager"
+/>
         <div className="p-6">
 
           <p className="text-gray-300 mb-6">
