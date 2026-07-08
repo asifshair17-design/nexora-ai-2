@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { generateImage } from "@/lib/ai/generate";
 
 export async function POST(req: Request) {
   try {
@@ -11,19 +12,26 @@ export async function POST(req: Request) {
       );
     }
 
-    // Enhance the prompt with the selected style
-    const finalPrompt = `${prompt}, ${style} style`;
+    const image = await generateImage(
+      prompt,
+      style,
+      size
+    );
 
-    // (We'll use 'size' later when we move to a model that supports it.)
-    console.log("Requested size:", size);
+    return NextResponse.json({
+      image,
+    });
 
-   const image = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
-
-    return NextResponse.json({ image });
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
+      {
+        error: "Something went wrong",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }
