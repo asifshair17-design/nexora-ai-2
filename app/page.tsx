@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/browser";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -86,11 +86,17 @@ const [loading, setLoading] = useState(false);
 
 const data = await response.json();
 
-      if (!data.image) {
-        throw new Error("No image returned");
-      }
+// First check if the API returned an error
+if (!response.ok) {
+  throw new Error(data.error || "Something went wrong");
+}
 
-      setImage(data.image);
+// Then check if an image exists
+if (!data.image) {
+  throw new Error("No image returned");
+}
+
+setImage(data.image);
 
       const {
         data: { user },
@@ -114,10 +120,15 @@ console.log("Insert error:", error);
           setImages((prev) => [insertedImage, ...prev]);
         }
       }
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong.");
-    } finally {
+   } catch (error) {
+  console.error(error);
+
+  if (error instanceof Error) {
+    alert(error.message);
+  } else {
+    alert("Something went wrong.");
+  }
+} finally {
       setLoading(false);
     }
   }  return (

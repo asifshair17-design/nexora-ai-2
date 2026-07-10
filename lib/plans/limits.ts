@@ -1,7 +1,7 @@
 export const PLANS = {
   free: {
     name: "Free",
-    dailyImages: 20,
+    dailyImages: 20
   },
 
   pro: {
