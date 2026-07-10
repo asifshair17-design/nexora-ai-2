@@ -1,3 +1,4 @@
+import { saveGeneratedImage } from "@/lib/supabase/images";
 import { getPlan } from "@/lib/plans/limits";
 import { getTodayUsage } from "@/lib/supabase/usage";
 import { recordUsage } from "@/lib/supabase/usage";
@@ -40,16 +41,22 @@ if (todayUsage >= plan.dailyImages) {
     }
 
     const image = await generateImage(
-      prompt,
-      style,
-      size
-    );
+  prompt,
+  style,
+  size
+);
+
+await saveGeneratedImage(
+  user.id,
+  image,
+  prompt
+);
+
 await recordUsage(user.id);
 
-    return NextResponse.json({
-      image,
-    });
-
+return NextResponse.json({
+  image,
+});
   } catch (error) {
     console.error(error);
 
