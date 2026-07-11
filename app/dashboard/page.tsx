@@ -7,7 +7,7 @@ import { getPlan } from "@/lib/plans/limits";
 export default function DashboardPage() {
   const [imageCount, setImageCount] = useState(0);
   const [todayUsage, setTodayUsage] = useState(0);
-
+const [favoriteCount, setFavoriteCount] = useState(0);
   const plan = getPlan("free");
 
   useEffect(() => {
@@ -46,6 +46,17 @@ export default function DashboardPage() {
       .gte("created_at", startOfDay.toISOString());
 
     setTodayUsage(usageCount || 0);
+    // Favorite images
+const { count: favorites } = await supabase
+  .from("images")
+  .select("*", {
+    count: "exact",
+    head: true,
+  })
+  .eq("user_id", user.id)
+  .eq("favorite", true);
+
+setFavoriteCount(favorites || 0);
   }
 
   return (
@@ -60,8 +71,8 @@ export default function DashboardPage() {
         <div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
           <h2 className="text-gray-400">🖼 Images</h2>
           <p className="text-5xl font-bold mt-4">
-            {imageCount}
-          </p>
+  {favoriteCount}
+</p>
         </div>
 
         {/* Today's Usage */}
