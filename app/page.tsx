@@ -27,6 +27,8 @@ const [loading, setLoading] = useState(false);
 
   const [images, setImages] = useState<SavedImage[]>([]);
 const [search, setSearch] = useState("");
+const [credits, setCredits] = useState(0);
+const [plan, setPlan] = useState("Free");
   useEffect(() => {
     loadImages();
   }, []);
@@ -37,6 +39,16 @@ const [search, setSearch] = useState("");
     } = await supabase.auth.getUser();
 
     if (!user) return;
+    const { data: creditData } = await supabase
+  .from("user_credits")
+  .select("credits, plan")
+  .eq("user_id", user.id)
+  .single();
+
+if (creditData) {
+  setCredits(creditData.credits);
+  setPlan(creditData.plan);
+}
 
     const { data, error } = await supabase
       .from("images")
@@ -133,7 +145,54 @@ setImage(data.image);
         data: { user },
       } = await supabase.auth.getUser();
 console.log("Current user:", user);
+if (!user) {
+  alert("Please login first.");
+  return;
+}
+
+const { data: credit } = await supabase
+  .from("user_credits")
+  .select("credits, plan, last_reset")
+  .eq("user_id", user.id)
+  .single();
+
+if (!credit) {
+  alert("Credits not found.");
+  return;
+}
+const today = new Date().toISOString().split("T")[0];
+
+if (
+  credit.plan === "free" &&
+  credit.last_reset !== today
+) {
+  await supabase
+    .from("user_credits")
+    .update({
+      credits: 5,
+      last_reset: today,
+    })
+    .eq("user_id", user.id);
+
+  credit.credits = 5;
+  credit.last_reset = today;
+
+  setCredits(5);
+}
+if (credit.credits <= 0) {
+  alert(
+    "You have no credits left. Upgrade to Pro or come back tomorrow."
+  );
+  return;
+}
       if (user) {
+        await supabase
+  .from("user_credits")
+  .update({
+    credits: credit.credits - 1,
+  })
+  .eq("user_id", user.id);
+  setCredits(credit.credits - 1);
         const { data: insertedImage, error } = await supabase
           .from("images")
           .insert({
@@ -187,7 +246,25 @@ console.log("Insert error:", error);
             <p className="mt-6 text-gray-400 text-lg">
               Turn your imagination into stunning artwork in seconds.
             </p>
-          
+          <div className="mt-6 flex justify-center">
+  <div className="rounded-2xl border border-purple-600 bg-gray-900 px-6 py-4 text-center">
+    <p className="text-sm text-gray-400">
+      Current Plan
+    </p>
+
+    <p className="text-xl font-bold text-purple-400 capitalize">
+      {plan}
+    </p>
+
+    <p className="mt-2 text-lg font-semibold">
+      Credits Remaining: {credits} / 5
+    </p>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Upgrade to Pro for more monthly credits
+    </p>
+  </div>
+</div>
           </div>
 
           <div className="flex justify-center mt-16">
