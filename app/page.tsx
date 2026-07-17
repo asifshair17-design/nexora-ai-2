@@ -9,7 +9,8 @@ import Sidebar from "./components/Sidebar";
 import PromptBox from "./components/PromptBox";
 import ImageCard from "./components/ImageCard";
 import ImageHistory from "./components/ImageHistory";
-
+import Footer from "./components/Footer";
+import toast from "react-hot-toast";
 type SavedImage = {
   id: string;
   prompt: string;
@@ -39,12 +40,11 @@ const [plan, setPlan] = useState("Free");
     } = await supabase.auth.getUser();
 
     if (!user) return;
-    const { data: creditData } = await supabase
-  .from("user_credits")
+  const { data: creditData } = await supabase
+  .from("profiles")
   .select("credits, plan")
-  .eq("user_id", user.id)
+  .eq("id", user.id)
   .single();
-
 if (creditData) {
   setCredits(creditData.credits);
   setPlan(creditData.plan);
@@ -77,6 +77,7 @@ if (creditData) {
   }
 
   setImages((prev) => prev.filter((img) => img.id !== id));
+  toast.success("Image deleted successfully!");
 }
 
 async function toggleFavorite(
@@ -105,123 +106,115 @@ async function toggleFavorite(
         : img
     )
   );
+  toast.success(
+  favorite
+    ? "Removed from favorites"
+    : "Added to favorites"
+);
 }
-   async function handleGenerate() {
-    if (!prompt.trim()) {
-      alert("Please enter a prompt.");
+
+  async function handleGenerate() {
+  if (!prompt.trim()) {
+   toast.error("Please enter a prompt.");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      toast.error("Please login first.");
       return;
     }
 
-    setLoading(true);
+    // Get credits & plan
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("credits, plan")
+      .eq("id", user.id)
+      .single();
 
-    try {
-    const response = await fetch("/api/generate", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    prompt,
-    style,
-    size,
-  }),
-});
-
-const data = await response.json();
-
-// First check if the API returned an error
-if (!response.ok) {
-  throw new Error(data.error || "Something went wrong");
-}
-
-// Then check if an image exists
-if (!data.image) {
-  throw new Error("No image returned");
-}
-
-setImage(data.image);
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-console.log("Current user:", user);
-if (!user) {
-  alert("Please login first.");
-  return;
-}
-
-const { data: credit } = await supabase
-  .from("user_credits")
-  .select("credits, plan, last_reset")
-  .eq("user_id", user.id)
-  .single();
-
-if (!credit) {
-  alert("Credits not found.");
-  return;
-}
-const today = new Date().toISOString().split("T")[0];
-
-if (
-  credit.plan === "free" &&
-  credit.last_reset !== today
-) {
-  await supabase
-    .from("user_credits")
-    .update({
-      credits: 5,
-      last_reset: today,
-    })
-    .eq("user_id", user.id);
-
-  credit.credits = 5;
-  credit.last_reset = today;
-
-  setCredits(5);
-}
-if (credit.credits <= 0) {
-  alert(
-    "You have no credits left. Upgrade to Pro or come back tomorrow."
-  );
-  return;
-}
-      if (user) {
-        await supabase
-  .from("user_credits")
-  .update({
-    credits: credit.credits - 1,
-  })
-  .eq("user_id", user.id);
-  setCredits(credit.credits - 1);
-        const { data: insertedImage, error } = await supabase
-          .from("images")
-          .insert({
-            user_id: user.id,
-            prompt,
-            image_url: data.image,
-          })
-          .select()
-          .single();
-console.log("Inserted image:", insertedImage);
-console.log("Insert error:", error);
-        if (error) {
-          console.error(error);
-        } else if (insertedImage) {
-          setImages((prev) => [insertedImage, ...prev]);
-        }
-      }
-   } catch (error) {
-  console.error(error);
-
-  if (error instanceof Error) {
-    alert(error.message);
-  } else {
-    alert("Something went wrong.");
-  }
-} finally {
-      setLoading(false);
+    if (profileError || !profile) {
+      alert("Profile not found.");
+      return;
     }
-  }  return (
+
+   if (profile.plan !== "pro" && profile.credits <= 0) {
+  toast.error("You have no credits left. Upgrade to Pro.");
+  return;
+}
+
+    // Generate image
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt,
+        style,
+        size,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Generation failed");
+    }
+
+    setImage(result.image);
+toast.success("Image generated successfully!");
+    // Deduct 1 credit
+    if (profile.plan !== "pro") {
+  await supabase
+    .from("profiles")
+    .update({
+      credits: profile.credits - 1,
+    })
+    .eq("id", user.id);
+
+  setCredits(profile.credits - 1);
+} else {
+  setCredits(profile.credits);
+}
+
+    // Save image
+    const { data: insertedImage, error } = await supabase
+      .from("images")
+      .insert({
+        user_id: user.id,
+        prompt,
+        image_url: result.image,
+      })
+      .select()
+      .single();
+
+    if (insertedImage) {
+      setImages((prev) => [insertedImage, ...prev]);
+    }
+
+    if (error) {
+      console.error(error);
+    }
+
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof Error) {
+      alert(error.message);
+    } else {
+      alert("Something went wrong.");
+    }
+  } finally {
+    setLoading(false);
+  }
+}
+   return (
     <>
       <Navbar />
 
@@ -252,13 +245,25 @@ console.log("Insert error:", error);
       Current Plan
     </p>
 
-    <p className="text-xl font-bold text-purple-400 capitalize">
-      {plan}
-    </p>
+   <p
+  className={`text-xl font-bold ${
+    plan === "pro"
+      ? "text-yellow-400"
+      : "text-purple-400"
+  }`}
+>
+  {plan === "pro" ? "💎 Pro Member" : "Free"}
+</p>
 
-    <p className="mt-2 text-lg font-semibold">
-      Credits Remaining: {credits} / 5
-    </p>
+   {plan === "pro" ? (
+  <p className="mt-2 text-lg font-semibold text-yellow-400">
+    💎 Unlimited AI Images
+  </p>
+) : (
+  <p className="mt-2 text-lg font-semibold">
+    Credits Remaining: {credits} / 5
+  </p>
+)}
 
     <p className="mt-2 text-sm text-gray-500">
       Upgrade to Pro for more monthly credits
@@ -395,8 +400,11 @@ console.log("Insert error:", error);
   </div>
 
 </section>
-        </main>
-      </div>
-    </>
+      </main>
+</div>
+
+<Footer />
+
+</>
   );
 }

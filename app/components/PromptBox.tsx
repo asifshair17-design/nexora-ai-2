@@ -77,20 +77,20 @@ export default function PromptBox({
 
       </div>
 
-  <button
-  onClick={onGenerate}
-  disabled={loading}
-  className="mt-8 w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-4 text-lg font-bold hover:scale-105 transition disabled:opacity-50"
->
-  {loading ? (
-    <span className="flex items-center justify-center gap-2">
-      <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-      Generating...
-    </span>
-  ) : (
-    "✨ Generate Image"
-  )}
-</button>
+      <button
+        onClick={onGenerate}
+        disabled={loading}
+       className="mt-8 w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-4 text-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+            Generating...
+          </span>
+        ) : (
+          "✨ Generate Image"
+        )}
+      </button>
 
     </div>
   );
