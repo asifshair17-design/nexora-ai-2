@@ -1,4 +1,4 @@
-import { generatePollinationsImage } from "./providers/pollinations";
+import { generateStabilityImage } from "./providers/stability";
 
 function buildPrompt(
   prompt: string,
@@ -6,28 +6,28 @@ function buildPrompt(
 ) {
   const stylePrompts: Record<string, string> = {
     Realistic:
-      "ultra realistic, professional photography, 8k, HDR, highly detailed, masterpiece, sharp focus",
+      "ultra realistic, professional photography, 8k, HDR, masterpiece",
 
     Anime:
-      "anime style, vibrant colors, masterpiece, detailed illustration, studio quality",
+      "anime style, vibrant colors, detailed illustration",
 
     Fantasy:
-      "epic fantasy artwork, magical atmosphere, cinematic lighting, highly detailed",
+      "epic fantasy artwork, magical atmosphere",
 
     Cyberpunk:
-      "cyberpunk city, neon lights, futuristic, cinematic, ultra detailed",
+      "cyberpunk, neon lights, futuristic",
 
     Pixel:
-      "pixel art, retro game style, clean pixels, vibrant colors",
+      "pixel art, retro game",
 
     Cartoon:
-      "cartoon style, colorful, Disney quality, cute, smooth illustration",
+      "cartoon style, colorful",
 
     Cinematic:
-      "cinematic composition, dramatic lighting, movie scene, masterpiece",
+      "cinematic lighting, movie scene",
 
     Oil:
-      "oil painting, brush strokes, museum quality artwork",
+      "oil painting, museum quality",
   };
 
   return `${prompt}, ${
@@ -40,15 +40,7 @@ export async function generateImage(
   style: string,
   size: string
 ) {
-  console.log("Requested size:", size);
+  const enhancedPrompt = buildPrompt(prompt, style);
 
-  const enhancedPrompt = buildPrompt(
-    prompt,
-    style
-  );
-
-  return generatePollinationsImage(
-    enhancedPrompt,
-    style
-  );
+  return await generateStabilityImage(enhancedPrompt);
 }

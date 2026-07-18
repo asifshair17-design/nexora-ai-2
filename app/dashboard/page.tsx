@@ -29,11 +29,12 @@ const [activities, setActivities] = useState<Activity[]>([]);
     if (!user) return;
 const { data: profileData } = await supabase
   .from("profiles")
-  .select("plan, credits")
+  .select("plan, credits, pro_expires_at")
   .eq("id", user.id)
   .single();
 
 setProfile(profileData);
+console.log("Dashboard Profile:", profileData);
     // Total images
     const { count: imageTotal } = await supabase
       .from("images")
@@ -87,7 +88,7 @@ setActivities(recentImages || []);
       Dashboard
     </h1>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-6">
 <div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
   <h2 className="text-gray-400">🖼 Images</h2>
 
@@ -169,6 +170,29 @@ setActivities(recentImages || []);
     </button>
   </Link>
 
+</div>
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+  <h2 className="text-gray-400">
+    ⏳ Subscription
+  </h2>
+
+  <p className="text-3xl font-bold mt-4 text-green-400">
+    {profile?.plan === "pro" && profile?.pro_expires_at
+      ? `${Math.max(
+          0,
+          Math.ceil(
+            (new Date(profile.pro_expires_at).getTime() - Date.now()) /
+              (1000 * 60 * 60 * 24)
+          )
+        )} Days Left`
+      : "Free Plan"}
+  </p>
+
+  <p className="text-gray-500 mt-3">
+    {profile?.plan === "pro"
+      ? "Your subscription is active."
+      : "Upgrade anytime to unlock unlimited AI images."}
+  </p>
 </div>
     </div>
 <div className="mt-14">

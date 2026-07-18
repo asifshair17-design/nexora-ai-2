@@ -9,7 +9,8 @@ type PromptBoxProps = {
   setSize: (value: string) => void;
 
   loading: boolean;
-  onGenerate: () => void;
+progress: number;
+onGenerate: () => void;
 };
 
 export default function PromptBox({
@@ -20,7 +21,8 @@ export default function PromptBox({
   size,
   setSize,
   loading,
-  onGenerate,
+progress,
+onGenerate,
 }: PromptBoxProps) {
   return (
     <div className="w-full max-w-4xl rounded-3xl bg-gray-900 border border-gray-800 p-8">
@@ -91,7 +93,21 @@ export default function PromptBox({
           "✨ Generate Image"
         )}
       </button>
+{loading && (
+  <div className="mt-4">
+    <div className="flex justify-between text-sm text-gray-400 mb-2">
+      <span>Creating your masterpiece...</span>
+      <span>{progress}%</span>
+    </div>
 
+    <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+      <div
+        className="h-3 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
+        style={{ width: `${progress}%` }}
+      />
+    </div>
+  </div>
+)}
     </div>
   );
 }

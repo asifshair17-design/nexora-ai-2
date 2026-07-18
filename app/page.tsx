@@ -25,7 +25,7 @@ const [size, setSize] = useState("Square");
 
 const [image, setImage] = useState("");
 const [loading, setLoading] = useState(false);
-
+const [progress, setProgress] = useState(0);
   const [images, setImages] = useState<SavedImage[]>([]);
 const [search, setSearch] = useState("");
 const [credits, setCredits] = useState(0);
@@ -120,12 +120,12 @@ async function toggleFavorite(
   }
 
   setLoading(true);
-
+setProgress(10);
   try {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-
+setProgress(20);
     if (!user) {
       toast.error("Please login first.");
       return;
@@ -142,12 +142,12 @@ async function toggleFavorite(
       alert("Profile not found.");
       return;
     }
-
+setProgress(35);
    if (profile.plan !== "pro" && profile.credits <= 0) {
   toast.error("You have no credits left. Upgrade to Pro.");
   return;
 }
-
+setProgress(50);
     // Generate image
     const response = await fetch("/api/generate", {
       method: "POST",
@@ -162,12 +162,13 @@ async function toggleFavorite(
     });
 
     const result = await response.json();
-
+setProgress(80);
     if (!response.ok) {
       throw new Error(result.error || "Generation failed");
     }
 
     setImage(result.image);
+    setProgress(100);
 toast.success("Image generated successfully!");
     // Deduct 1 credit
     if (profile.plan !== "pro") {
@@ -210,9 +211,12 @@ toast.success("Image generated successfully!");
     } else {
       alert("Something went wrong.");
     }
-  } finally {
+  }finally {
+  setTimeout(() => {
     setLoading(false);
-  }
+    setProgress(0);
+  }, 400);
+}
 }
    return (
     <>
@@ -284,6 +288,7 @@ toast.success("Image generated successfully!");
   setSize={setSize}
 
   loading={loading}
+  progress={progress}
   onGenerate={handleGenerate}
 />
           </div>

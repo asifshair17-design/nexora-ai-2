@@ -40,22 +40,22 @@ if (todayUsage >= plan.dailyImages) {
       );
     }
 
-    const image = await generateImage(
+  const imageBuffer = await generateImage(
   prompt,
   style,
   size
 );
 
-await saveGeneratedImage(
+const imageUrl = await saveGeneratedImage(
   user.id,
-  image,
+  imageBuffer,
   prompt
 );
 
 await recordUsage(user.id);
 
 return NextResponse.json({
-  image,
+  image: imageUrl,
 });
   } catch (error) {
     console.error(error);

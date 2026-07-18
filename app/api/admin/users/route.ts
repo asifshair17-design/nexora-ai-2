@@ -28,7 +28,7 @@ console.log("Current API user:", user);
  // Get all users
 const { data, error } = await supabase
   .from("profiles")
-  .select("id, email, plan, credits, created_at")
+  .select("id, email, plan, credits, created_at, pro_expires_at")
   .order("created_at", { ascending: false });
 
 if (error) {

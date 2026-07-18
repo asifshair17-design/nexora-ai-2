@@ -4,7 +4,6 @@ import { createServerSupabase } from "@/lib/supabase/server";
 export async function POST(req: Request) {
   const supabase = await createServerSupabase();
 
-  // Check logged-in user
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -16,7 +15,6 @@ export async function POST(req: Request) {
     );
   }
 
-  // Only your email can update plans
   if (user.email !== "asifshair25@gmail.com") {
     return NextResponse.json(
       { error: "Forbidden" },
@@ -25,12 +23,31 @@ export async function POST(req: Request) {
   }
 
   const { id, plan } = await req.json();
+console.log("Updating user:", id);
+console.log("New plan:", plan);
+  let updateData: any = {
+    plan,
+  };
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ plan })
-    .eq("id", id);
+  if (plan === "pro") {
+    const expiry = new Date();
 
+    expiry.setDate(expiry.getDate() + 30);
+
+    updateData.pro_expires_at = expiry.toISOString();
+  } else {
+    updateData.pro_expires_at = null;
+  }
+
+ const { data, error } = await supabase
+  .from("profiles")
+  .update(updateData)
+  .eq("id", id)
+  .select();
+
+console.log("Update Data:", updateData);
+console.log("Updated Row:", data);
+console.log("Update Error:", error);
   if (error) {
     return NextResponse.json(
       { error: error.message },

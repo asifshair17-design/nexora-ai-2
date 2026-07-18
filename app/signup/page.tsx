@@ -32,9 +32,19 @@ export default function SignupPage() {
       return;
     }
 
-    alert("Account created successfully!");
+    await fetch("/api/send-welcome-email", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email,
+  }),
+});
 
-    router.push("/login");
+alert("Account created successfully!");
+
+router.push("/login");
   }
 
   return (

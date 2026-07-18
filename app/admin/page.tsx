@@ -12,6 +12,7 @@ type User = {
   image_count?: number;
   favorite_count?: number;
   today_usage?: number;
+  pro_expires_at?: string | null;
 };
 export default function AdminPage() {
  const [users, setUsers] = useState<User[]>([]);
@@ -324,7 +325,14 @@ async function deleteUser(id: string) {
       <p className="mt-3">
         <strong>Plan:</strong> {selectedUser.plan}
       </p>
-
+{selectedUser.plan === "pro" && (
+  <p className="mt-3">
+    <strong>💎 Pro Expires:</strong>{" "}
+    {selectedUser.pro_expires_at
+      ? new Date(selectedUser.pro_expires_at).toLocaleDateString()
+      : "Not Set"}
+  </p>
+)}
       <p className="mt-3">
         <strong>Credits:</strong> {selectedUser.credits}
       </p>
