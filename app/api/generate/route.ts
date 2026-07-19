@@ -58,15 +58,18 @@ return NextResponse.json({
   image: imageUrl,
 });
   } catch (error) {
-    console.error(error);
+  console.error("Generate API Error:", error);
 
-    return NextResponse.json(
-      {
-        error: "Something went wrong",
-      },
-      {
-        status: 500,
-      }
-    );
+return NextResponse.json(
+  {
+    error:
+      error instanceof Error
+        ? error.message
+        : "Unknown error",
+  },
+  {
+    status: 500,
+  }
+);
   }
 }

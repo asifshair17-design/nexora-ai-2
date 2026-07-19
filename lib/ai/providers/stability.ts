@@ -22,11 +22,16 @@ export async function generateStabilityImage(
     }
   );
 
-  if (response.status !== 200) {
-    throw new Error(
-      `${response.status}: ${Buffer.from(response.data).toString()}`
-    );
-  }
+ if (response.status !== 200) {
+  console.error(
+    "Stability API Error:",
+    response.status,
+    Buffer.from(response.data).toString()
+  );
 
+  throw new Error(
+    Buffer.from(response.data).toString()
+  );
+}
   return Buffer.from(response.data);
 }
