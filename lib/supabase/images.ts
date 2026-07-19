@@ -9,17 +9,19 @@ export async function saveGeneratedImage(
 
   const fileName = `${userId}/${Date.now()}.webp`;
 
-  const { error: uploadError } = await supabase.storage
-    .from("generated-images")
-    .upload(fileName, imageBuffer, {
-      contentType: "image/webp",
-    });
+const { data, error: uploadError } = await supabase.storage
+  .from("generated-images")
+  .upload(fileName, imageBuffer, {
+    contentType: "image/webp",
+    upsert: true,
+  });
 
-  if (uploadError) {
-    console.error(uploadError);
-    throw uploadError;
-  }
+console.log("UPLOAD DATA:", data);
+console.log("UPLOAD ERROR:", uploadError);
 
+if (uploadError) {
+  throw uploadError;
+}
   const {
     data: { publicUrl },
   } = supabase.storage
