@@ -39,17 +39,10 @@ if (todayUsage >= plan.dailyImages) {
         { status: 400 }
       );
     }
-
-  const imageBuffer = await generateImage(
+const imageUrl = await generateImage(
   prompt,
   style,
   size
-);
-
-const imageUrl = await saveGeneratedImage(
-  user.id,
-  imageBuffer,
-  prompt
 );
 
 await recordUsage(user.id);
