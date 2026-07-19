@@ -58,11 +58,11 @@ return NextResponse.json({
   image: imageUrl,
 });
   } catch (error: any) {
-  console.error("Generate Error:", error);
+  console.error("FULL ERROR:", error);
 
   return NextResponse.json(
     {
-      error: error?.message || "Something went wrong",
+      error: error?.message || String(error),
     },
     {
       status: 500,
