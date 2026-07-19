@@ -1,37 +1,17 @@
-import axios from "axios";
-import FormData from "form-data";
-
 export async function generateStabilityImage(
   prompt: string
 ) {
-  const payload = {
-    prompt,
-    output_format: "webp",
-  };
+  const url =
+    "https://image.pollinations.ai/prompt/" +
+    encodeURIComponent(prompt);
 
-  const response = await axios.postForm(
-    "https://api.stability.ai/v2beta/stable-image/generate/ultra",
-    axios.toFormData(payload, new FormData()),
-    {
-      validateStatus: undefined,
-      responseType: "arraybuffer",
-      headers: {
-        Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
-        Accept: "image/*",
-      },
-    }
-  );
+  const response = await fetch(url);
 
- if (response.status !== 200) {
-  console.error(
-    "Stability API Error:",
-    response.status,
-    Buffer.from(response.data).toString()
-  );
+  if (!response.ok) {
+    throw new Error("Failed to generate image");
+  }
 
-  throw new Error(
-    Buffer.from(response.data).toString()
-  );
-}
-  return Buffer.from(response.data);
+  const arrayBuffer = await response.arrayBuffer();
+
+  return Buffer.from(arrayBuffer);
 }
