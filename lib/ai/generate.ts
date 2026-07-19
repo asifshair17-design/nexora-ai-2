@@ -1,4 +1,4 @@
-import { generateStabilityImage } from "./providers/stability";
+import { generatePollinationsImage } from "./providers/pollinations";
 
 function buildPrompt(
   prompt: string,
@@ -42,5 +42,8 @@ export async function generateImage(
 ) {
   const enhancedPrompt = buildPrompt(prompt, style);
 
-  return await generateStabilityImage(enhancedPrompt);
+  return await generatePollinationsImage(
+    enhancedPrompt,
+    style
+  );
 }
