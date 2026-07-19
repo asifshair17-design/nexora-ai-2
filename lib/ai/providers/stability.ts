@@ -5,13 +5,20 @@ export async function generateStabilityImage(
     "https://image.pollinations.ai/prompt/" +
     encodeURIComponent(prompt);
 
-  const response = await fetch(url);
+  try {
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Failed to generate image");
+    if (!response.ok) {
+      throw new Error(
+        `Pollinations returned ${response.status}`
+      );
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    return Buffer.from(arrayBuffer);
+  } catch (error) {
+    console.error("Pollinations Error:", error);
+    throw error;
   }
-
-  const arrayBuffer = await response.arrayBuffer();
-
-  return Buffer.from(arrayBuffer);
 }
