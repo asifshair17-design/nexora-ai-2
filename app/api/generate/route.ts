@@ -57,19 +57,16 @@ await recordUsage(user.id);
 return NextResponse.json({
   image: imageUrl,
 });
-  } catch (error) {
-  console.error("Generate API Error:", error);
+  } catch (error: any) {
+  console.error("Generate Error:", error);
 
-return NextResponse.json(
-  {
-    error:
-      error instanceof Error
-        ? error.message
-        : "Unknown error",
-  },
-  {
-    status: 500,
-  }
-);
-  }
+  return NextResponse.json(
+    {
+      error: error?.message || "Something went wrong",
+    },
+    {
+      status: 500,
+    }
+  );
+}
 }
