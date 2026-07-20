@@ -187,15 +187,15 @@ export default function PricingPage() {
 
       </div>
 
-      <Link href="/checkout">
-
-        <button className="mt-12 w-full rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 py-5 text-lg font-bold hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
-
-          ⭐ Upgrade to Pro
-
-        </button>
-
-      </Link>
+     <a
+  href="https://nexora-ai-app.lemonsqueezy.com/checkout/buy/b185b74d-3b9b-414f-9b89-9c4594c607c9"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <button className="mt-12 w-full rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 py-5 text-lg font-bold hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
+    ⭐ Upgrade to Pro
+  </button>
+</a>
 
     </div>
 
@@ -408,12 +408,15 @@ export default function PricingPage() {
       </button>
     </Link>
 
-    <Link href="/checkout">
-      <button className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:scale-105 transition">
-        Upgrade to Pro
-      </button>
-    </Link>
-
+   <a
+  href="https://nexora-ai-app.lemonsqueezy.com/checkout/buy/b185b74d-3b9b-414f-9b89-9c4594c607c9"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <button className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:scale-105 transition">
+    Upgrade to Pro
+  </button>
+</a>
   </div>
 
 </section>
