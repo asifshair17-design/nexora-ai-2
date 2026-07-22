@@ -94,18 +94,48 @@ onGenerate,
         )}
       </button>
 {loading && (
-  <div className="mt-4">
-    <div className="flex justify-between text-sm text-gray-400 mb-2">
-      <span>Creating your masterpiece...</span>
-      <span>{progress}%</span>
+  <div className="mt-8 rounded-2xl border border-purple-700/40 bg-black/40 p-6">
+
+    <div className="flex items-center justify-center gap-3">
+
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-500 border-t-transparent" />
+
+      <div className="text-left">
+        <h3 className="text-lg font-bold text-white">
+          🤖 AI is creating your masterpiece...
+        </h3>
+
+        <p className="text-sm text-gray-400">
+          Please wait while Nexora AI generates your image.
+        </p>
+      </div>
+
     </div>
 
-    <div className="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-      <div
-        className="h-3 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
-        style={{ width: `${progress}%` }}
-      />
+    <div className="mt-6 flex justify-between text-sm text-gray-400">
+      <span>Generation Progress</span>
+      <span className="font-bold text-white">
+        {progress}%
+      </span>
     </div>
+
+    <div className="mt-3 h-4 overflow-hidden rounded-full bg-gray-800">
+
+      <div
+        className="h-4 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 transition-all duration-500"
+        style={{
+          width: `${progress}%`,
+        }}
+      />
+
+    </div>
+
+    <div className="mt-5 rounded-xl bg-gray-900 p-4 text-center text-sm text-gray-300">
+
+      💡 Tip: Detailed prompts create better AI images.
+
+    </div>
+
   </div>
 )}
     </div>

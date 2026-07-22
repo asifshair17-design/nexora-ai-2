@@ -3,7 +3,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -35,16 +35,9 @@ export default function RootLayout({
   <WhatsAppButton />
 
   <Toaster
-    position="top-right"
-    toastOptions={{
-      duration: 3000,
-      style: {
-        background: "#111827",
-        color: "#ffffff",
-        border: "1px solid #7c3aed",
-      },
-    }}
-  />
+  richColors
+  position="top-right"
+/>
 </body>
     </html>
   );

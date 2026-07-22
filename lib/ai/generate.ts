@@ -1,4 +1,5 @@
 import { generatePollinationsImage } from "./providers/pollinations";
+import { generateOpenAIImage } from "./providers/openai";
 
 function buildPrompt(
   prompt: string,
@@ -38,10 +39,17 @@ function buildPrompt(
 export async function generateImage(
   prompt: string,
   style: string,
-  size: string
+  size: string,
+  isPro: boolean
 ) {
   const enhancedPrompt = buildPrompt(prompt, style);
 
+  if (isPro) {
+    console.log("⭐ Using OpenAI Image API");
+    return await generateOpenAIImage(enhancedPrompt);
+  }
+
+  console.log("🆓 Using Pollinations AI");
   return await generatePollinationsImage(
     enhancedPrompt,
     style

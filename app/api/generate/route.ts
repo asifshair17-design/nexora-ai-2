@@ -42,7 +42,8 @@ if (todayUsage >= plan.dailyImages) {
 const imageBuffer = await generateImage(
   prompt,
   style,
-  size
+  size,
+  user.plan === "pro"
 );
 
 const imageUrl = await saveGeneratedImage(

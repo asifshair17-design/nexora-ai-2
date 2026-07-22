@@ -4,6 +4,20 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function PricingPage() {
+const handleCheckout = async () => {
+  const res = await fetch("/api/create-checkout", {
+    method: "POST",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Something went wrong.");
+    return;
+  }
+
+  window.location.href = data.url;
+};
   const [billing, setBilling] = useState("monthly");
   return (
 <main className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-black text-white px-6 py-20">
@@ -187,15 +201,13 @@ export default function PricingPage() {
 
       </div>
 
-     <a
-  href="https://nexora-ai-app.lemonsqueezy.com/checkout/buy/b185b74d-3b9b-414f-9b89-9c4594c607c9"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <button className="mt-12 w-full rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 py-5 text-lg font-bold hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
+     
+  <button
+  onClick={handleCheckout}
+  className="mt-12 w-full rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 py-5 text-lg font-bold hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
     ⭐ Upgrade to Pro
   </button>
-</a>
+
 
     </div>
 
@@ -408,15 +420,12 @@ export default function PricingPage() {
       </button>
     </Link>
 
-   <a
-  href="https://nexora-ai-app.lemonsqueezy.com/checkout/buy/b185b74d-3b9b-414f-9b89-9c4594c607c9"
-  target="_blank"
-  rel="noopener noreferrer"
+   <button
+  onClick={handleCheckout}
+  className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:scale-105 transition"
 >
-  <button className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:scale-105 transition">
-    Upgrade to Pro
-  </button>
-</a>
+  Upgrade to Pro
+</button>
   </div>
 
 </section>

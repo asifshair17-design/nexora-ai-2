@@ -139,7 +139,7 @@ setProgress(20);
       .single();
 
     if (profileError || !profile) {
-      alert("Profile not found.");
+      toast.error("Profile not found.");
       return;
     }
 setProgress(35);
@@ -207,9 +207,9 @@ toast.success("Image generated successfully!");
     console.error(error);
 
     if (error instanceof Error) {
-      alert(error.message);
+      toast.error(error.message);
     } else {
-      alert("Something went wrong.");
+     toast.error("Something went wrong.");
     }
   }finally {
   setTimeout(() => {
@@ -243,35 +243,70 @@ toast.success("Image generated successfully!");
             <p className="mt-6 text-gray-400 text-lg">
               Turn your imagination into stunning artwork in seconds.
             </p>
-          <div className="mt-6 flex justify-center">
-  <div className="rounded-2xl border border-purple-600 bg-gray-900 px-6 py-4 text-center">
-    <p className="text-sm text-gray-400">
+        <div className="mt-8 flex justify-center">
+  <div className="w-full max-w-md rounded-3xl border border-purple-700 bg-gray-900 p-8 shadow-xl">
+
+    <p className="text-sm uppercase tracking-widest text-gray-500">
       Current Plan
     </p>
 
-   <p
-  className={`text-xl font-bold ${
-    plan === "pro"
-      ? "text-yellow-400"
-      : "text-purple-400"
-  }`}
->
-  {plan === "pro" ? "💎 Pro Member" : "Free"}
-</p>
+    <h2
+      className={`mt-3 text-3xl font-bold ${
+        plan === "pro"
+          ? "text-yellow-400"
+          : "text-purple-400"
+      }`}
+    >
+      {plan === "pro" ? "💎 PRO PLAN" : "🆓 FREE PLAN"}
+    </h2>
 
-   {plan === "pro" ? (
-  <p className="mt-2 text-lg font-semibold text-yellow-400">
-    💎 Unlimited AI Images
-  </p>
-) : (
-  <p className="mt-2 text-lg font-semibold">
-    Credits Remaining: {credits} / 5
-  </p>
-)}
+    {plan === "pro" ? (
+      <div className="mt-6 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-5">
 
-    <p className="mt-2 text-sm text-gray-500">
-      Upgrade to Pro for more monthly credits
-    </p>
+        <p className="text-2xl font-bold text-yellow-400">
+          Unlimited AI Images
+        </p>
+
+        <ul className="mt-4 space-y-2 text-gray-300 text-left">
+          <li>✅ Unlimited Daily Images</li>
+          <li>✅ Faster Generation</li>
+          <li>✅ Image History</li>
+          <li>✅ Premium Support</li>
+        </ul>
+
+      </div>
+    ) : (
+      <>
+        <div className="mt-6 flex justify-between text-gray-300">
+          <span>Daily Credits</span>
+
+          <span className="font-bold">
+            {credits} / 30
+          </span>
+        </div>
+
+        <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-gray-800">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
+            style={{
+              width: `${(credits / 30) * 100}%`,
+            }}
+          />
+        </div>
+
+        <p className="mt-5 text-gray-400">
+          Generate amazing AI images every day.
+        </p>
+
+        <a
+          href="/pricing"
+          className="mt-6 block w-full rounded-2xl bg-purple-600 py-4 text-center font-bold hover:bg-purple-700 transition"
+        >
+          🚀 Upgrade to Pro
+        </a>
+      </>
+    )}
+
   </div>
 </div>
           </div>

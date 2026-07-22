@@ -87,16 +87,64 @@ setActivities(recentImages || []);
     <h1 className="text-5xl font-bold mb-10">
       Dashboard
     </h1>
+   
+<div className="rounded-3xl border border-purple-700/40 bg-gradient-to-r from-purple-900/30 via-gray-900 to-blue-900/30 p-10 mb-10">
 
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-6">
-<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+  <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+
+    <div>
+
+      <p className="text-purple-400 font-semibold text-lg">
+        👋 Welcome Back
+      </p>
+
+      <h1 className="text-5xl font-extrabold mt-3">
+        Nexora AI Dashboard
+      </h1>
+
+      <p className="text-gray-400 mt-5 text-lg max-w-xl">
+        Manage your AI creations, monitor credits, track usage,
+        and upgrade your account whenever you're ready.
+      </p>
+
+      <div className="flex gap-4 mt-8">
+
+        <Link href="/">
+          <button className="rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-bold hover:scale-105 transition">
+            ✨ Generate Image
+          </button>
+        </Link>
+
+        <Link href="/pricing">
+          <button className="rounded-xl border border-purple-500 px-8 py-4 font-bold hover:bg-purple-700/20 transition">
+            💎 Upgrade
+          </button>
+        </Link>
+
+      </div>
+
+    </div>
+
+    <div className="hidden lg:flex items-center justify-center">
+
+      <div className="h-40 w-40 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-7xl shadow-2xl shadow-purple-500/30">
+        🤖
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
   <h2 className="text-gray-400">🖼 Images</h2>
 
   <p className="text-5xl font-bold mt-4">
     {imageCount}
   </p>
 </div>
-<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
   <h2 className="text-gray-400">
     ⭐ Credits
   </h2>
@@ -109,7 +157,7 @@ setActivities(recentImages || []);
     Remaining AI Credits
   </p>
 </div>
-<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
   <h2 className="text-gray-400">
     📊 Today's Usage
   </h2>
@@ -137,7 +185,7 @@ setActivities(recentImages || []);
     {Math.max(0, plan.dailyImages - todayUsage)} remaining today
   </p>
 </div>
-<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
   <h2 className="text-gray-400">
     ❤️ Favorites
   </h2>
@@ -150,7 +198,7 @@ setActivities(recentImages || []);
     Saved favorite images
   </p>
 </div>
-<div className="rounded-3xl bg-gradient-to-br from-purple-900/40 to-blue-900/30 border border-purple-700 p-8">
+<div className="rounded-3xl bg-gradient-to-br from-purple-900/40 to-blue-900/30 border border-purple-700 p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/20">
 
   <h2 className="text-gray-300">
     💎 Current Plan
@@ -171,7 +219,7 @@ setActivities(recentImages || []);
   </Link>
 
 </div>
-<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8">
+<div className="rounded-3xl bg-gray-900 border border-gray-800 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
   <h2 className="text-gray-400">
     ⏳ Subscription
   </h2>

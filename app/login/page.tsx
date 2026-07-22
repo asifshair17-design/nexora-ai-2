@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase/browser";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ export default function LoginPage() {
 
   async function handleLogin() {
     if (!email || !password) {
-      alert("Please fill all fields.");
+      toast.error("Please fill all fields.");
       return;
     }
 
@@ -28,11 +29,15 @@ export default function LoginPage() {
     setLoading(false);
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 
-    router.push("/");
+    toast.success("✅ Welcome back!");
+
+    setTimeout(() => {
+      router.push("/");
+    }, 1000);
   }
 
   return (
@@ -62,7 +67,7 @@ export default function LoginPage() {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="w-full rounded-xl bg-purple-600 py-4 font-bold hover:bg-purple-700 disabled:opacity-50"
+          className="w-full rounded-xl bg-purple-600 py-4 font-bold hover:bg-purple-700 disabled:opacity-50 transition"
         >
           {loading ? "Logging in..." : "Login"}
         </button>

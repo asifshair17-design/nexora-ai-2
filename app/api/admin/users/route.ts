@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
-
+import { ADMIN_EMAIL } from "@/lib/admin";
 export async function GET() {
   const supabase = await createServerSupabase();
 
@@ -18,7 +18,7 @@ console.log("Current API user:", user);
   }
 
   // Only your admin email can access
-  if (user.email !== "asifshair25@gmail.com") {
+  if (user.email !== ADMIN_EMAIL) {
     return NextResponse.json(
       { error: "Forbidden" },
       { status: 403 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
-
+import { ADMIN_EMAIL } from "@/lib/admin";
 export async function POST(req: Request) {
   const supabase = await createServerSupabase();
 
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (user.email !== "asifshair25@gmail.com") {
+  if (user.email !== ADMIN_EMAIL) {
     return NextResponse.json(
       { error: "Forbidden" },
       { status: 403 }
