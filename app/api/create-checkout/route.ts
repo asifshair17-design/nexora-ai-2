@@ -23,13 +23,19 @@ export async function POST() {
 
     const supabase = await createServerSupabase();
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    console.log("=== CHECKOUT DEBUG ===");
 
-    console.log("Current user:", user);
+    const sessionResult = await supabase.auth.getSession();
+    console.log("SESSION:", sessionResult);
 
-    if (!user) {
+    const userResult = await supabase.auth.getUser();
+    console.log("USER RESULT:", userResult);
+
+    const currentUser = userResult.data.user;
+
+    console.log("Current user:", currentUser);
+
+    if (!currentUser) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -38,9 +44,9 @@ export async function POST() {
 
     const response = await createCheckout(STORE_ID, VARIANT_ID, {
       checkoutData: {
-        email: user.email!,
+        email: currentUser.email!,
         custom: {
-          user_id: user.id,
+          user_id: currentUser.id,
         },
       },
       productOptions: {
