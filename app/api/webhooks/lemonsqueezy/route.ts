@@ -28,12 +28,13 @@ export async function POST(req: Request) {
 
       const { error } = await supabaseAdmin
         .from("profiles")
-        .update({
-          plan: "pro",
-          lemonsqueezy_customer_id: customerId,
-          lemonsqueezy_subscription_id: subscriptionId,
-          pro_expires_at: renewsAt,
-        })
+       .update({
+  plan: "pro",
+  credits: 1000,
+  lemonsqueezy_customer_id: customerId,
+  lemonsqueezy_subscription_id: subscriptionId,
+  pro_expires_at: renewsAt,
+})
         .eq("email", email);
 
       if (error) {

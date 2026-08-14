@@ -1,12 +1,14 @@
 export const PLANS = {
   free: {
     name: "Free",
+    startingCredits: 1000,
     dailyImages: 30,
   },
 
   pro: {
     name: "Pro",
-    dailyImages: Infinity,
+    monthlyCredits: 1000,
+    dailyImages: 30,
   },
 } as const;
 

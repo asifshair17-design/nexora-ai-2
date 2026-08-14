@@ -73,7 +73,7 @@ const [selectedImage, setSelectedImage] = useState<Image | null>(null);
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
+   <main className="min-h-screen bg-black text-white p-10">
 
       <div className="flex items-center justify-between mb-10">
 

@@ -8,10 +8,7 @@ type HistoryCardProps = {
   prompt: string;
   favorite: boolean;
   onDelete: (id: string) => void;
-  onFavorite: (
-    id: string,
-    favorite: boolean
-  ) => void;
+  onFavorite: (id: string, favorite: boolean) => void;
 };
 
 export default function HistoryCard({
@@ -23,89 +20,126 @@ export default function HistoryCard({
   onFavorite,
 }: HistoryCardProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
+
   async function copyPrompt() {
-    await navigator.clipboard.writeText(prompt);
-    alert("Prompt copied!");
+    try {
+      await navigator.clipboard.writeText(prompt);
+      alert("Prompt copied!");
+    } catch (error) {
+      console.error("Copy failed:", error);
+      alert("Could not copy prompt.");
+    }
   }
 
   return (
-   <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-800">
+    <>
+      {/* Image History Card */}
+      <div className="overflow-hidden rounded-2xl border border-gray-800 bg-gray-900">
 
-     <img
-  src={image}
-  alt={prompt}
-  onClick={() => setPreviewOpen(true)}
-  className="w-full aspect-square object-cover cursor-pointer hover:scale-105 transition duration-300"
-/>
-      <div className="p-4">
-
-        <p className="text-sm text-gray-400 line-clamp-2 mb-4">
-          {prompt}
-        </p>
-
-        <div className="flex gap-2">
-
-          <button
-            onClick={() => onFavorite(id, favorite)}
-            className="flex-1 rounded-lg bg-pink-600 py-2 hover:bg-pink-700"
-          >
-            {favorite ? "❤️" : "🤍"}
-          </button>
-
-          <button
-            onClick={copyPrompt}
-            className="flex-1 rounded-lg bg-blue-600 py-2 hover:bg-blue-700"
-          >
-            📋
-          </button>
-
-          <a
-            href={image}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 rounded-lg bg-green-600 py-2 text-center hover:bg-green-700"
-          >
-            ⬇
-          </a>
-
-          <button
-            onClick={() => onDelete(id)}
-            className="flex-1 rounded-lg bg-red-600 py-2 hover:bg-red-700"
-          >
-            🗑
-          </button>
-
+        {/* Image */}
+        <div className="overflow-hidden">
+          <img
+            src={image}
+            alt={prompt}
+            onClick={() => setPreviewOpen(true)}
+            className="aspect-square w-full cursor-pointer object-cover transition duration-300 hover:scale-105"
+          />
         </div>
 
-          </div>
+        {/* Card Content */}
+        <div className="p-4">
 
+          <p className="mb-4 line-clamp-2 text-sm text-gray-400">
+            {prompt}
+          </p>
+
+          {/* Buttons */}
+          <div className="grid grid-cols-4 gap-2">
+
+            {/* Favorite */}
+            <button
+              onClick={() =>
+                onFavorite(id, favorite)
+              }
+              title={
+                favorite
+                  ? "Remove from favorites"
+                  : "Add to favorites"
+              }
+              className="rounded-lg bg-pink-600 py-2 transition hover:bg-pink-700"
+            >
+              {favorite ? "❤️" : "🤍"}
+            </button>
+
+            {/* Copy */}
+            <button
+              onClick={copyPrompt}
+              title="Copy prompt"
+              className="rounded-lg bg-blue-600 py-2 transition hover:bg-blue-700"
+            >
+              📋
+            </button>
+
+            {/* Download */}
+            <a
+              href={image}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Download image"
+              className="rounded-lg bg-green-600 py-2 text-center transition hover:bg-green-700"
+            >
+              ⬇
+            </a>
+
+            {/* Delete */}
+            <button
+              onClick={() => onDelete(id)}
+              title="Delete image"
+              className="rounded-lg bg-red-600 py-2 transition hover:bg-red-700"
+            >
+              🗑
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+
+      {/* Fullscreen Preview */}
       {previewOpen && (
         <div
-          
-  className="fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-6"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 p-6"
           onClick={() => setPreviewOpen(false)}
         >
           <div
-            className="max-w-5xl w-full"
+            className="w-full max-w-5xl"
             onClick={(e) => e.stopPropagation()}
           >
+
+            {/* Preview Image */}
             <img
               src={image}
               alt={prompt}
-              className="w-full max-h-[85vh] object-contain rounded-2xl"
+              className="max-h-[80vh] w-full rounded-2xl object-contain"
             />
 
+            {/* Prompt */}
+            <p className="mt-4 text-center text-sm text-gray-400">
+              {prompt}
+            </p>
+
+            {/* Close */}
             <button
               onClick={() => setPreviewOpen(false)}
-              className="mt-6 w-full rounded-xl bg-red-600 py-3 hover:bg-red-700"
+              className="mt-6 w-full rounded-xl bg-red-600 py-3 font-bold transition hover:bg-red-700"
             >
               Close
             </button>
+
           </div>
         </div>
       )}
-
-    </div>
+    </>
   );
 }

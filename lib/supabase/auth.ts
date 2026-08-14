@@ -18,7 +18,7 @@ export async function getCurrentUser() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("plan, pro_expires_at")
+    .select("plan, pro_expires_at, credits")
     .eq("id", user.id)
     .single();
 
@@ -41,8 +41,9 @@ export async function getCurrentUser() {
     plan = "free";
   }
 
-  return {
-    ...user,
-    plan,
-  };
+ return {
+  ...user,
+  plan,
+  credits: profile?.credits ?? 0,
+};
 }

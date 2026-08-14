@@ -144,8 +144,9 @@ setProgress(20);
       return;
     }
 setProgress(35);
-   if (profile.plan !== "pro" && profile.credits <= 0) {
+if (profile.plan !== "pro" && profile.credits <= 0) {
   toast.error("You have no credits left. Upgrade to Pro.");
+  setLoading(false);
   return;
 }
 setProgress(50);
@@ -171,19 +172,8 @@ setProgress(80);
     setImage(result.image);
     setProgress(100);
 toast.success("Image generated successfully!");
-    // Deduct 1 credit
-    if (profile.plan !== "pro") {
-  await supabase
-    .from("profiles")
-    .update({
-      credits: profile.credits - 1,
-    })
-    .eq("id", user.id);
 
-  setCredits(profile.credits - 1);
-} else {
-  setCredits(profile.credits);
-}
+setCredits(result.remainingCredits);
 
     // Save image
     const { data: insertedImage, error } = await supabase

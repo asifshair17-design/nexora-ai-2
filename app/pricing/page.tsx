@@ -1,29 +1,27 @@
 "use client";
+import PricingCard from "@/app/components/PricingCard";
+import { PLANS } from "@/lib/plans";
+const plans = [
+  PLANS.basic,
+  PLANS.standard,
+  PLANS.pro,
+  PLANS.premium,
+];
 
 import { useState } from "react";
 import Link from "next/link";
 
 export default function PricingPage() {
-const handleCheckout = async () => {
-  const res = await fetch("/api/create-checkout", {
-    method: "POST",
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    alert(data.error || "Something went wrong.");
-    return;
-  }
-
-  window.location.href = data.url;
+const handleCheckout = () => {
+  window.location.href =
+    "https://whop.com/checkout/plan_EQEMhK2lwNTcX";
 };
-  const [billing, setBilling] = useState("monthly");
+ const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   return (
 <main className="min-h-screen bg-gradient-to-b from-black via-gray-950 to-black text-white px-6 py-20">
 
   {/* Hero */}
-  <div className="max-w-4xl mx-auto text-center">
+ <div className="max-w-6xl mx-auto text-center py-10">
 
     <span className="inline-flex items-center rounded-full border border-purple-600 bg-purple-900/30 px-5 py-2 text-purple-300 font-medium">
       💎 Premium Plans
@@ -87,134 +85,124 @@ const handleCheckout = async () => {
 
   {/* Pricing Cards */}
 
-  <div className="max-w-7xl mx-auto mt-20 grid gap-10 lg:grid-cols-2">
-
-    {/* FREE */}
-
-    <div className="rounded-[32px] border border-gray-800 bg-gray-900/60 backdrop-blur-xl p-10 transition duration-300 hover:border-gray-600">
-
-      <h2 className="text-3xl font-bold">
-        Free
-      </h2>
-
-      <p className="mt-6 text-7xl font-black">
-        $0
-      </p>
-
-      <p className="text-gray-400 mt-2">
-        Forever
-      </p>
-
-      <div className="mt-10 space-y-5 text-lg">
-
-        <div>
-  ✅ {billing === "monthly"
-    ? "20 Images / Day"
-    : "240 Images / Year"}
+<div className="w-full max-w-[1900px] mx-auto mt-24 px-6 grid gap-8 lg:grid-cols-4">
+ {plans.map((plan) => (
+  <PricingCard
+    featured={plan.name === "Pro"}
+      key={plan.name}
+      icon={plan.icon}
+      title={plan.name}
+      monthlyPrice={plan.monthlyPrice}
+      yearlyPrice={plan.yearlyPrice}
+      description={plan.description}
+      monthlyCredits={plan.monthlyCredits}
+      yearlyCredits={plan.yearlyCredits}
+      model={plan.model}
+      color={plan.border}
+      buttonColor={plan.button}
+      billing={billing}
+    />
+  ))}
 </div>
+{/* Credits Explained */}
 
-        <div>✅ Basic AI Models</div>
+<section className="w-full max-w-[1500px] mx-auto mt-28 px-8">
 
-        <div>✅ Standard Speed</div>
+  <div className="rounded-[40px] border border-gray-800 bg-gray-900/50 backdrop-blur-xl p-12">
 
-        <div>✅ Image History</div>
+    <h2 className="text-5xl font-black text-center">
+      How AI Credits Work
+    </h2>
 
-        <div>✅ Favorites</div>
+    <p className="mt-5 text-center text-xl text-gray-400">
+      Every image you generate uses AI Credits. Pick the plan that fits your workflow.
+    </p>
 
-        <div>✅ Downloads</div>
+    <div className="mt-14 grid gap-8 md:grid-cols-2">
+
+      {/* Card 1 */}
+      <div className="rounded-3xl border border-purple-600/30 bg-gradient-to-br from-purple-900/20 to-gray-900 p-8">
+
+        <div className="text-5xl">💳</div>
+
+        <h3 className="mt-5 text-2xl font-bold">
+          1 Credit = 1 AI Image
+        </h3>
+
+        <p className="mt-3 text-gray-400">
+          Every premium AI image costs only one credit.
+        </p>
 
       </div>
 
-      <button className="mt-12 w-full rounded-2xl border border-gray-700 bg-gray-800 py-5 text-lg font-bold hover:bg-gray-700 transition">
-        Current Plan
-      </button>
+      {/* Card 2 */}
+      <div className="rounded-3xl border border-blue-600/30 bg-gradient-to-br from-blue-900/20 to-gray-900 p-8">
+
+        <div className="text-5xl">📅</div>
+
+        <h3 className="mt-5 text-2xl font-bold">
+          Monthly Credits
+        </h3>
+
+        <p className="mt-3 text-gray-400">
+          Receive <strong>1000 AI Credits</strong> every month.
+        </p>
+
+      </div>
+
+      {/* Card 3 */}
+      <div className="rounded-3xl border border-green-600/30 bg-gradient-to-br from-green-900/20 to-gray-900 p-8">
+
+        <div className="text-5xl">📆</div>
+
+        <h3 className="mt-5 text-2xl font-bold">
+          Yearly Credits
+        </h3>
+
+        <p className="mt-3 text-gray-400">
+          Receive <strong>12,000 AI Credits</strong> every year and save 20%.
+        </p>
+
+      </div>
+
+      {/* Card 4 */}
+      <div className="rounded-3xl border border-pink-600/30 bg-gradient-to-br from-pink-900/20 to-gray-900 p-8">
+
+        <div className="text-5xl">⚡</div>
+
+        <h3 className="mt-5 text-2xl font-bold">
+          Instant Delivery
+        </h3>
+
+        <p className="mt-3 text-gray-400">
+          Credits are added to your account immediately after payment.
+        </p>
+
+      </div>
 
     </div>
 
-    {/* PRO */}
+    {/* Bottom Banner */}
 
-    <div
-  className={`relative rounded-[32px] border-2 p-10 overflow-hidden transition-all duration-500 hover:scale-[1.03]
-  ${
-    billing === "yearly"
-      ? "border-green-400 bg-gradient-to-br from-green-900/30 via-gray-900 to-black shadow-[0_0_90px_rgba(34,197,94,0.45)]"
-      : "border-purple-500 bg-gradient-to-br from-purple-900/40 via-gray-900 to-black shadow-[0_0_60px_rgba(168,85,247,0.35)]"
-  }`}
->
+    <div className="mt-12 rounded-3xl border border-purple-500/30 bg-gradient-to-r from-purple-900/30 via-fuchsia-900/20 to-blue-900/30 p-8 text-center">
 
-      <div className="absolute -top-4 right-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 px-6 py-2 text-sm font-bold shadow-lg shadow-purple-600/40">
-        ⭐ MOST POPULAR
-      </div>
+      <h3 className="text-3xl font-bold">
+        🚀 Build Without Limits
+      </h3>
 
-      <h2 className="text-3xl font-bold">
-        Pro
-      </h2>
-
-      <p className="mt-6 text-7xl font-black tracking-tight">
-  {billing === "monthly" ? (
-    <>
-      $9
-      <span className="text-2xl font-medium">
-        /month
-      </span>
-    </>
-  ) : (
-    <>
-      $86
-      <span className="text-2xl font-medium">
-        /year
-      </span>
-    </>
-  )}
-</p>
-      <div className="mt-3">
-
-  <p className="text-purple-300 font-semibold">
-    Unlimited creativity
-  </p>
-
-  {billing === "yearly" && (
-    <p className="mt-2 text-green-400 font-bold text-lg">
-      🎉 You save $22 every year
-    </p>
-  )}
-
-</div>
-
-      <div className="mt-10 space-y-5 text-lg">
-
-        <div>
-  🚀 {billing === "monthly"
-    ? "Unlimited Images"
-    : "Unlimited Images + 20% Savings"}
-</div>
-
-        <div>🚀 Premium AI Models</div>
-
-        <div>🚀 Ultra Fast Generation</div>
-
-        <div>🚀 HD Downloads</div>
-
-        <div>🚀 Commercial License</div>
-
-        <div>🚀 Priority Support</div>
-
-      </div>
-
-     
-  <button
-  onClick={handleCheckout}
-  className="mt-12 w-full rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 py-5 text-lg font-bold hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300">
-    ⭐ Upgrade to Pro
-  </button>
-
+      <p className="mt-4 text-lg text-gray-300">
+        Whether you're creating social media posts, ads, thumbnails or artwork,
+        every credit gives you one premium-quality AI image.
+      </p>
 
     </div>
 
   </div>
+
+</section>
   {/* Feature Comparison */}
 
-<section className="max-w-6xl mx-auto mt-28">
+<section className="w-full max-w-[1600px] mx-auto mt-32 px-8">
 
   <div className="text-center mb-12">
 
@@ -248,15 +236,15 @@ const handleCheckout = async () => {
 
       <tbody>
 
-        <tr className="border-t border-gray-800">
-
-          <td className="p-6">Images Per Day</td>
-
-          <td className="text-center">20</td>
-
-          <td className="text-center text-green-400">Unlimited</td>
-
-        </tr>
+       <tr className="border-t border-gray-800">
+  <td className="p-6">AI Credits</td>
+  <td className="text-center">20 / Day</td>
+  <td className="text-center text-green-400">
+    {billing === "monthly"
+      ? "1000 / Month"
+      : "12,000 / Year"}
+  </td>
+</tr>
 
         <tr className="border-t border-gray-800">
 
@@ -309,7 +297,7 @@ const handleCheckout = async () => {
 
 {/* Trust Section */}
 
-<section className="max-w-6xl mx-auto mt-24">
+<section className="w-full max-w-[1600px] mx-auto mt-32 px-8">
 
   <div className="grid md:grid-cols-3 gap-8">
 
@@ -360,7 +348,7 @@ const handleCheckout = async () => {
 </section>
 {/* FAQ */}
 
-<section className="max-w-4xl mx-auto mt-28">
+<section className="w-full max-w-[1400px] mx-auto mt-32 px-8">
 
   <h2 className="text-5xl font-black text-center mb-14">
     Frequently Asked Questions
@@ -400,17 +388,17 @@ const handleCheckout = async () => {
 </section>
 {/* CTA */}
 
-<section className="max-w-5xl mx-auto mt-28 rounded-[40px] border border-purple-700 bg-gradient-to-r from-purple-900/40 via-gray-900 to-blue-900/30 p-16 text-center">
+<section className="w-full max-w-[1500px] mx-auto mt-32 px-8 rounded-[40px] border border-purple-700 bg-gradient-to-r from-purple-900/40 via-gray-900 to-blue-900/30 p-16 text-center">
 
-  <h2 className="text-6xl font-black">
-    Ready to Create
-    <br />
-    Amazing AI Art?
-  </h2>
+ <h2 className="text-6xl font-black">
+  Ready to Unlock
+  <br />
+  1000 AI Credits?
+</h2>
 
   <p className="mt-6 text-xl text-gray-300">
-    Join Nexora AI today and unlock the future of creativity.
-  </p>
+  Generate thousands of premium AI images using flexible monthly credits.
+</p>
 
   <div className="mt-12 flex flex-col md:flex-row justify-center gap-6">
 
@@ -422,10 +410,13 @@ const handleCheckout = async () => {
 
    <button
   onClick={handleCheckout}
-  className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-10 py-5 font-bold hover:scale-105 transition"
+  className="rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-500 to-blue-600 px-10 py-5 font-bold text-white shadow-xl shadow-purple-600/40 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.8)] transition-all duration-300 animate-pulse"
 >
-  Upgrade to Pro
+  🚀 Buy Credits
 </button>
+<p className="mt-4 text-sm text-gray-400">
+  🔒 Payments secured by Stripe • Credits delivered instantly
+</p>
   </div>
 
 </section>
