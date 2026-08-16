@@ -50,6 +50,7 @@ const libraryLinks = [
 ];
 
 const accountLinks = [
+  { title: "Analytics", icon: "📊", href: "/analytics" },
   { title: "Profile", icon: "👤", href: "/profile" },
   { title: "Settings", icon: "⚙", href: "/settings" },
   { title: "Pricing", icon: "💎", href: "/pricing" },
