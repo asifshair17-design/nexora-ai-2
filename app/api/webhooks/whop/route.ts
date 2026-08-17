@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+import Whop from "@whop/sdk";
 import { supabaseAdmin } from "../../../../lib/supabase-admin";
+
+const whop = new Whop();
 
 const PLAN_MAP: Record<
   string,
@@ -76,9 +79,77 @@ const PLAN_MAP: Record<
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    /*
+    ============================================================
+    READ RAW BODY
+    ============================================================
+    */
 
-    console.log("========== WHOP WEBHOOK ==========");
+    const rawBody = await req.text();
+
+    /*
+    ============================================================
+    VERIFY WHOP WEBHOOK SIGNATURE
+    ============================================================
+    */
+
+    const webhookSecret =
+      process.env.WHOP_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
+      console.error(
+        "❌ WHOP_WEBHOOK_SECRET is missing."
+      );
+
+      return NextResponse.json(
+        {
+          error: "Webhook secret not configured",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    let body: any;
+
+    try {
+     const headers: Record<string, string> = {};
+
+req.headers.forEach((value, key) => {
+  headers[key] = value;
+});
+
+body = whop.webhooks.unwrap(rawBody, {
+  headers,
+  key: webhookSecret,
+});
+    } catch (error) {
+      console.error(
+        "❌ Invalid Whop webhook signature:",
+        error
+      );
+
+      return NextResponse.json(
+        {
+          error: "Invalid webhook signature",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
+    /*
+    ============================================================
+    VERIFIED WEBHOOK
+    ============================================================
+    */
+
+    console.log(
+      "========== VERIFIED WHOP WEBHOOK =========="
+    );
+
     console.log("EVENT:", body.type);
 
     const data = body.data;
@@ -104,9 +175,18 @@ export async function POST(req: Request) {
       const membershipId = data.id;
 
       console.log("Whop email:", email);
-      console.log("Whop user ID:", whopUserId);
-      console.log("Whop membership ID:", membershipId);
-      console.log("Whop plan ID:", planId);
+      console.log(
+        "Whop user ID:",
+        whopUserId
+      );
+      console.log(
+        "Whop membership ID:",
+        membershipId
+      );
+      console.log(
+        "Whop plan ID:",
+        planId
+      );
 
       /*
       ------------------------------------------------------------
@@ -115,7 +195,9 @@ export async function POST(req: Request) {
       */
 
       if (!email || !planId) {
-        console.log("❌ Missing email or plan ID.");
+        console.log(
+          "❌ Missing email or plan ID."
+        );
 
         return NextResponse.json({
           received: true,
@@ -131,7 +213,10 @@ export async function POST(req: Request) {
       const planInfo = PLAN_MAP[planId];
 
       if (!planInfo) {
-        console.log("❌ Unknown Whop plan:", planId);
+        console.log(
+          "❌ Unknown Whop plan:",
+          planId
+        );
 
         return NextResponse.json({
           received: true,
@@ -139,13 +224,24 @@ export async function POST(req: Request) {
         });
       }
 
-      console.log("Nexora plan:", planInfo.plan);
-      console.log("Billing:", planInfo.billing);
-      console.log("Credits:", planInfo.credits);
+      console.log(
+        "Nexora plan:",
+        planInfo.plan
+      );
+
+      console.log(
+        "Billing:",
+        planInfo.billing
+      );
+
+      console.log(
+        "Credits:",
+        planInfo.credits
+      );
 
       /*
       ------------------------------------------------------------
-      Find Nexora user by email
+      Find Nexora user
       ------------------------------------------------------------
       */
 
@@ -154,7 +250,9 @@ export async function POST(req: Request) {
         error: profileError,
       } = await supabaseAdmin
         .from("profiles")
-        .select("id, email, plan, credits")
+        .select(
+          "id, email, plan, credits"
+        )
         .eq("email", email)
         .single();
 
@@ -170,7 +268,10 @@ export async function POST(req: Request) {
         });
       }
 
-      console.log("✅ Nexora user found:", profile.id);
+      console.log(
+        "✅ Nexora user found:",
+        profile.id
+      );
 
       /*
       ------------------------------------------------------------
@@ -193,15 +294,10 @@ export async function POST(req: Request) {
         .from("profiles")
         .update({
           plan: planInfo.plan,
-
           credits: planInfo.credits,
-
           pro_expires_at: expiresAt,
-
           whop_user_id: whopUserId,
-
           whop_membership_id: membershipId,
-
           whop_plan_id: planId,
         })
         .eq("id", profile.id);
@@ -214,7 +310,8 @@ export async function POST(req: Request) {
 
         return NextResponse.json(
           {
-            error: "Database update failed",
+            error:
+              "Database update failed",
           },
           {
             status: 500,
@@ -224,18 +321,46 @@ export async function POST(req: Request) {
 
       /*
       ------------------------------------------------------------
-      Success
+      SUCCESS
       ------------------------------------------------------------
       */
 
-      console.log("==================================");
-      console.log("✅ WHOP SUBSCRIPTION ACTIVATED");
-      console.log("Email:", email);
-      console.log("Plan:", planInfo.plan);
-      console.log("Billing:", planInfo.billing);
-      console.log("Credits:", planInfo.credits);
-      console.log("Expires:", expiresAt);
-      console.log("==================================");
+      console.log(
+        "=========================================="
+      );
+
+      console.log(
+        "✅ WHOP SUBSCRIPTION ACTIVATED"
+      );
+
+      console.log(
+        "Email:",
+        email
+      );
+
+      console.log(
+        "Plan:",
+        planInfo.plan
+      );
+
+      console.log(
+        "Billing:",
+        planInfo.billing
+      );
+
+      console.log(
+        "Credits:",
+        planInfo.credits
+      );
+
+      console.log(
+        "Expires:",
+        expiresAt
+      );
+
+      console.log(
+        "=========================================="
+      );
     }
 
     /*
@@ -244,7 +369,10 @@ export async function POST(req: Request) {
     ============================================================
     */
 
-    if (body.type === "membership.deactivated") {
+    if (
+      body.type ===
+      "membership.deactivated"
+    ) {
       const membershipId = data.id;
 
       console.log(
@@ -258,13 +386,9 @@ export async function POST(req: Request) {
         .from("profiles")
         .update({
           plan: "free",
-
           credits: 0,
-
           pro_expires_at: null,
-
           whop_membership_id: null,
-
           whop_plan_id: null,
         })
         .eq(
@@ -294,23 +418,18 @@ export async function POST(req: Request) {
       body.type ===
       "membership.cancel_at_period_end_changed"
     ) {
-      const membershipId = data.id;
-
-      const cancelAtPeriodEnd =
-        data.cancel_at_period_end;
-
       console.log(
         "Membership cancellation status changed"
       );
 
       console.log(
         "Membership:",
-        membershipId
+        data.id
       );
 
       console.log(
         "Cancel at period end:",
-        cancelAtPeriodEnd
+        data.cancel_at_period_end
       );
     }
 
@@ -320,7 +439,10 @@ export async function POST(req: Request) {
     ============================================================
     */
 
-    if (body.type === "payment.succeeded") {
+    if (
+      body.type ===
+      "payment.succeeded"
+    ) {
       console.log(
         "✅ Whop payment succeeded:",
         data.id
@@ -333,7 +455,10 @@ export async function POST(req: Request) {
     ============================================================
     */
 
-    if (body.type === "payment.failed") {
+    if (
+      body.type ===
+      "payment.failed"
+    ) {
       console.log(
         "❌ Whop payment failed:",
         data.id
@@ -346,14 +471,19 @@ export async function POST(req: Request) {
     ============================================================
     */
 
-    if (body.type === "refund.created") {
+    if (
+      body.type ===
+      "refund.created"
+    ) {
       console.log(
         "💰 Whop refund created:",
         data.id
       );
     }
 
-    console.log("==================================");
+    console.log(
+      "========== WHOP WEBHOOK COMPLETE =========="
+    );
 
     return NextResponse.json({
       received: true,
@@ -366,10 +496,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
-        error: "Invalid webhook",
+        error: "Webhook failed",
       },
       {
-        status: 400,
+        status: 500,
       }
     );
   }
