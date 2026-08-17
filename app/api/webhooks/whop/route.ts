@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import Whop from "@whop/sdk";
 import { supabaseAdmin } from "../../../../lib/supabase-admin";
 
-const whop = new Whop();
+const whop = new Whop({
+  webhookKey: process.env.WHOP_WEBHOOK_SECRET
+    ? btoa(process.env.WHOP_WEBHOOK_SECRET)
+    : undefined,
+});
 
 const PLAN_MAP: Record<
   string,
@@ -122,7 +126,6 @@ req.headers.forEach((value, key) => {
 
 body = whop.webhooks.unwrap(rawBody, {
   headers,
-  key: webhookSecret,
 });
     } catch (error) {
       console.error(
