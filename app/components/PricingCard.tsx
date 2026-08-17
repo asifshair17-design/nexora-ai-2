@@ -21,8 +21,31 @@ type PricingCardProps = {
   featured?: boolean;
 };
 
-const WHOP_PRO_CHECKOUT =
-  "https://whop.com/checkout/plan_EQEMhK2lwNTcX";
+/* =========================================================
+   WHOP CHECKOUT LINKS
+   ========================================================= */
+
+const WHOP_CHECKOUTS = {
+  basic: {
+    monthly: "https://whop.com/checkout/plan_O5BGGznuAC4fi",
+    yearly: "https://whop.com/checkout/plan_v2lrEEv6hDd9i",
+  },
+
+  standard: {
+    monthly: "https://whop.com/checkout/plan_jxtXuTdBKiInIa",
+    yearly: "https://whop.com/checkout/plan_sEueFH3RZP5rx",
+  },
+
+  pro: {
+    monthly: "https://whop.com/checkout/plan_EQEMhK2lwNTcX",
+    yearly: "https://whop.com/checkout/plan_aRrgYRcUSBGCa",
+  },
+
+  premium: {
+    monthly: "https://whop.com/checkout/plan_SuuTsRdOF6s60",
+    yearly: "https://whop.com/checkout/plan_cGTFwpcOKGZa",
+  },
+} as const;
 
 export default function PricingCard({
   icon,
@@ -44,23 +67,29 @@ export default function PricingCard({
   const displayCredits =
     billing === "monthly" ? monthlyCredits : yearlyCredits;
 
-  const isPro = title.toLowerCase() === "pro";
+  /* =========================================================
+     FIND CURRENT PLAN
+  ========================================================= */
 
-  const isComingSoon =
-    title.toLowerCase() === "standard" ||
-    title.toLowerCase() === "premium";
+  const planKey =
+    title.toLowerCase() as keyof typeof WHOP_CHECKOUTS;
+
+  const checkoutUrl =
+    WHOP_CHECKOUTS[planKey]?.[billing];
+
+  const isPro = planKey === "pro";
+
+  /* =========================================================
+     SUBSCRIBE
+  ========================================================= */
 
   const handleSubscribe = () => {
-    if (isComingSoon) {
+    if (!checkoutUrl) {
+      alert("Checkout is currently unavailable.");
       return;
     }
 
-    if (isPro) {
-      window.location.href = WHOP_PRO_CHECKOUT;
-      return;
-    }
-
-    alert("Basic plan checkout is coming soon.");
+    window.location.href = checkoutUrl;
   };
 
   return (
@@ -95,13 +124,16 @@ export default function PricingCard({
         hover:shadow-[0_0_70px_rgba(168,85,247,0.45)]
       `}
     >
-      {/* Background Glow */}
+      {/* =====================================================
+          BACKGROUND GLOW
+      ===================================================== */}
 
       <div
         className={`
           pointer-events-none
           absolute
           inset-0
+
           ${
             featured
               ? "bg-gradient-to-br from-purple-600/20 via-fuchsia-500/10 to-blue-500/20"
@@ -110,7 +142,9 @@ export default function PricingCard({
         `}
       />
 
-      {/* Featured Glow */}
+      {/* =====================================================
+          FEATURED GLOW
+      ===================================================== */}
 
       {featured && (
         <>
@@ -120,7 +154,9 @@ export default function PricingCard({
         </>
       )}
 
-      {/* Featured Badge */}
+      {/* =====================================================
+          FEATURED BADGE
+      ===================================================== */}
 
       {featured && (
         <div className="absolute right-6 top-6 z-20 rounded-full bg-gradient-to-r from-yellow-300 via-orange-400 to-pink-500 px-5 py-2 text-sm font-black uppercase tracking-wider text-black shadow-[0_0_25px_rgba(255,200,0,0.8)]">
@@ -128,7 +164,9 @@ export default function PricingCard({
         </div>
       )}
 
-      {/* Floating Particles */}
+      {/* =====================================================
+          FLOATING PARTICLES
+      ===================================================== */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-8 top-10 h-2 w-2 rounded-full bg-purple-400/40 animate-ping" />
@@ -140,23 +178,25 @@ export default function PricingCard({
         <div className="absolute bottom-10 right-12 h-2 w-2 rounded-full bg-purple-300/30 animate-pulse" />
       </div>
 
-      {/* Content */}
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
       <div className="relative z-10">
 
-        {/* Icon */}
+        {/* ICON */}
 
         <div className="mb-8 text-6xl">
           {icon}
         </div>
 
-        {/* Title */}
+        {/* TITLE */}
 
         <h2 className="text-4xl font-black">
           {title}
         </h2>
 
-        {/* Price */}
+        {/* PRICE */}
 
         <div className="mt-8 flex items-end justify-center gap-2">
 
@@ -169,12 +209,14 @@ export default function PricingCard({
           </span>
 
           <span className="mb-4 text-lg text-gray-400">
-            {billing === "monthly" ? "/month" : "/year"}
+            {billing === "monthly"
+              ? "/month"
+              : "/year"}
           </span>
 
         </div>
 
-        {/* Yearly Saving */}
+        {/* YEARLY SAVING */}
 
         {billing === "yearly" && (
           <p className="mt-2 text-center font-semibold text-green-400">
@@ -182,17 +224,17 @@ export default function PricingCard({
           </p>
         )}
 
-        {/* Description */}
+        {/* DESCRIPTION */}
 
         <p className="mt-8 text-center text-lg leading-8 text-gray-300">
           {description}
         </p>
 
-        {/* Divider */}
+        {/* DIVIDER */}
 
         <div className="my-10 h-px w-full bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
 
-        {/* Credits */}
+        {/* CREDITS */}
 
         <div className="rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-900/20 via-gray-900 to-black p-8 text-center shadow-[0_0_30px_rgba(168,85,247,0.15)] backdrop-blur-sm">
 
@@ -212,7 +254,7 @@ export default function PricingCard({
 
         </div>
 
-        {/* Features */}
+        {/* FEATURES */}
 
         <div className="mt-10 space-y-4">
 
@@ -262,12 +304,11 @@ export default function PricingCard({
 
         </div>
 
-        {/* Button */}
+        {/* BUTTON */}
 
         <button
           type="button"
           onClick={handleSubscribe}
-          disabled={isComingSoon}
           className={`
             relative
             mt-12
@@ -282,52 +323,38 @@ export default function PricingCard({
             duration-500
 
             ${
-              isComingSoon
-                ? "cursor-not-allowed bg-gray-700 text-gray-400"
-                : featured
-                  ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 shadow-[0_0_35px_rgba(255,180,0,0.45)]"
-                  : buttonColor
+              featured
+                ? "bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 shadow-[0_0_35px_rgba(255,180,0,0.45)]"
+                : buttonColor
             }
 
-            ${
-              !isComingSoon
-                ? "hover:scale-105 hover:shadow-[0_0_45px_rgba(168,85,247,0.9)] active:scale-95"
-                : ""
-            }
+            hover:scale-105
+            hover:shadow-[0_0_45px_rgba(168,85,247,0.9)]
+            active:scale-95
           `}
         >
 
           <span className="relative z-10 flex items-center justify-center gap-3">
 
-            {isComingSoon
-              ? "🔒 Coming Soon"
-              : isPro
-                ? "⭐ Start Pro Today"
-                : "🚀 Subscribe Now"}
+            {isPro
+              ? "⭐ Start Pro Today"
+              : "🚀 Subscribe Now"}
 
           </span>
 
-          {!isComingSoon && (
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
-          )}
+          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
 
         </button>
 
-        {/* Checkout Information */}
+        {/* CHECKOUT INFORMATION */}
 
         <p className="mt-4 text-center text-sm text-gray-500">
-
-          {isComingSoon
-            ? "This plan will be available soon."
-            : "🔒 Secure checkout powered by Whop"}
-
+          🔒 Secure checkout powered by Whop
         </p>
 
-        {isPro && !isComingSoon && (
-          <p className="mt-2 text-center text-xs text-gray-600">
-            $19.99/month • Cancel anytime
-          </p>
-        )}
+        <p className="mt-2 text-center text-xs text-gray-600">
+          ${displayPrice}/{billing === "monthly" ? "month" : "year"} • Cancel anytime
+        </p>
 
       </div>
     </div>
