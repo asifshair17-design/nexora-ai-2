@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Logo Generator – Create Logos with AI | Nexora AI",
-
+  title: "AI Logo Generator – Create Logos with AI",
   description:
-    "Create professional logos with Nexora AI Logo Generator. Generate unique AI logos for businesses, brands, websites, social media and more.",
+    "Create professional AI logos for businesses, brands, websites and social media with Nexora AI. Turn your brand ideas into unique logo concepts online.",
 
   keywords: [
     "AI logo generator",
+    "AI logo generator online",
     "AI logo maker",
-    "logo generator AI",
     "AI logo creator",
+    "AI logo design",
     "free AI logo generator",
     "business logo generator",
-    "AI brand logo",
+    "brand logo generator",
+    "logo generator AI",
     "Nexora AI logo generator",
   ],
 
@@ -22,12 +23,19 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AI Logo Generator – Nexora AI",
+    title: "AI Logo Generator – Create Logos with AI | Nexora AI",
     description:
-      "Create professional logos for your brand, business or website using AI.",
+      "Create professional AI logos for businesses, brands, websites and social media with Nexora AI.",
     url: "https://nexora-ai-2-five.vercel.app/logo",
     siteName: "Nexora AI",
     type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Logo Generator – Create Logos with AI | Nexora AI",
+    description:
+      "Create professional AI logos for businesses and brands with Nexora AI.",
   },
 
   robots: {
