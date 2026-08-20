@@ -92,9 +92,7 @@ export default function Home() {
       prev.filter((img) => img.id !== id)
     );
 
-    toast.success(
-      "Image deleted successfully!"
-    );
+    toast.success("Image deleted successfully!");
   }
 
   async function toggleFavorite(
@@ -133,9 +131,7 @@ export default function Home() {
 
   async function handleGenerate() {
     if (!prompt.trim()) {
-      toast.error(
-        "Please enter a prompt."
-      );
+      toast.error("Please enter a prompt.");
       return;
     }
 
@@ -150,9 +146,7 @@ export default function Home() {
       setProgress(20);
 
       if (!user) {
-        toast.error(
-          "Please login first."
-        );
+        toast.error("Please login first.");
         return;
       }
 
@@ -166,9 +160,7 @@ export default function Home() {
         .single();
 
       if (profileError || !profile) {
-        toast.error(
-          "Profile not found."
-        );
+        toast.error("Profile not found.");
         return;
       }
 
@@ -193,8 +185,7 @@ export default function Home() {
         {
           method: "POST",
           headers: {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             prompt,
@@ -204,15 +195,13 @@ export default function Home() {
         }
       );
 
-      const result =
-        await response.json();
+      const result = await response.json();
 
       setProgress(80);
 
       if (!response.ok) {
         throw new Error(
-          result.error ||
-            "Generation failed"
+          result.error || "Generation failed"
         );
       }
 
@@ -255,13 +244,9 @@ export default function Home() {
       console.error(error);
 
       if (error instanceof Error) {
-        toast.error(
-          error.message
-        );
+        toast.error(error.message);
       } else {
-        toast.error(
-          "Something went wrong."
-        );
+        toast.error("Something went wrong.");
       }
     } finally {
       setTimeout(() => {
@@ -304,7 +289,6 @@ export default function Home() {
             <p className="mt-6 text-gray-400 text-lg">
               Turn your imagination into stunning artwork in seconds.
             </p>
-
 
             {/* =========================================
                 PLAN CARD
@@ -375,15 +359,13 @@ export default function Home() {
 
                     </div>
 
-
                     <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-gray-800">
 
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
                         style={{
                           width: `${Math.min(
-                            (credits / 30) *
-                              100,
+                            (credits / 30) * 100,
                             100
                           )}%`,
                         }}
@@ -391,11 +373,9 @@ export default function Home() {
 
                     </div>
 
-
                     <p className="mt-5 text-gray-400">
                       Generate amazing AI images every day.
                     </p>
-
 
                     <a
                       href="/pricing"
@@ -403,7 +383,6 @@ export default function Home() {
                     >
                       🚀 Upgrade to Pro
                     </a>
-
                   </>
 
                 )}
@@ -413,16 +392,6 @@ export default function Home() {
             </div>
 
           </div>
-
-
-          {/* =========================================
-              AD #1
-              FREE USERS ONLY
-          ========================================= */}
-
-          {plan !== "pro" && (
-            <MonetagAd />
-          )}
 
 
           {/* =========================================
@@ -448,6 +417,23 @@ export default function Home() {
             />
 
           </div>
+
+
+          {/* =========================================
+              SINGLE MONETAG AD
+              FREE USERS ONLY
+              
+              Position:
+              Prompt Box
+                    ↓
+                  AD
+                    ↓
+              Generated Image
+          ========================================= */}
+
+          {plan !== "pro" && (
+            <MonetagAd />
+          )}
 
 
           {/* =========================================
@@ -481,15 +467,12 @@ export default function Home() {
                 placeholder="🔍 Search your images..."
                 value={search}
                 onChange={(e) =>
-                  setSearch(
-                    e.target.value
-                  )
+                  setSearch(e.target.value)
                 }
                 className="w-full rounded-2xl border border-gray-800 bg-gray-900 px-6 py-4 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none"
               />
 
             </div>
-
 
             <ImageHistory
               images={images.filter(
@@ -501,22 +484,10 @@ export default function Home() {
                     )
               )}
               onDelete={deleteImage}
-              onFavorite={
-                toggleFavorite
-              }
+              onFavorite={toggleFavorite}
             />
 
           </div>
-
-
-          {/* =========================================
-              AD #2
-              FREE USERS ONLY
-          ========================================= */}
-
-          {plan !== "pro" && (
-            <MonetagAd />
-          )}
 
 
           {/* =========================================
@@ -545,7 +516,6 @@ export default function Home() {
 
 
             <div className="grid md:grid-cols-3 gap-8">
-
 
               {/* CARD 1 */}
 
