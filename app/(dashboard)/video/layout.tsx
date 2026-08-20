@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Video Generator – Create Videos with AI | Nexora AI",
-
+  title: "AI Video Generator – Create Videos with AI",
   description:
-    "Create engaging AI videos with Nexora AI. Generate videos for social media, YouTube, marketing, storytelling and creative projects.",
+    "Create engaging AI videos with Nexora AI. Generate videos for YouTube, social media, marketing, storytelling and creative projects.",
 
   keywords: [
     "AI video generator",
-    "AI video creator",
     "AI video generator online",
-    "AI generated video",
+    "AI video creator",
     "AI video maker",
-    "AI video creation",
+    "AI generated video",
     "text to video AI",
+    "AI video creation",
+    "AI video generator free",
     "Nexora AI video generator",
   ],
 
@@ -22,12 +22,19 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AI Video Generator – Nexora AI",
+    title: "AI Video Generator – Create Videos with AI | Nexora AI",
     description:
-      "Create engaging AI videos for social media, YouTube, marketing and creative projects.",
+      "Create engaging AI videos for YouTube, social media, marketing and creative projects with Nexora AI.",
     url: "https://nexora-ai-2-five.vercel.app/video",
     siteName: "Nexora AI",
     type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Video Generator – Create Videos with AI | Nexora AI",
+    description:
+      "Create engaging AI videos with Nexora AI for YouTube, social media and creative projects.",
   },
 
   robots: {
