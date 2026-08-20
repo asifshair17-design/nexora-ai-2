@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { supabase } from "@/lib/supabase/browser";
 
 import Navbar from "./components/Navbar";
@@ -274,19 +274,19 @@ export default function Home() {
               ✨ AI Powered Creative Platform
             </span>
 
-          <h1 className="mt-8 text-6xl font-extrabold">
-  AI Image Generator
-  <br />
+            <h1 className="mt-8 text-6xl font-extrabold">
+              Create Amazing
+              <br />
 
-  <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-    Create Stunning AI Images
-  </span>
-</h1>
+              <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+                AI Images
+              </span>
+            </h1>
 
-            <p className="mt-6 text-gray-400 text-lg max-w-3xl mx-auto">
-  Create stunning AI images online with Nexora AI. Turn your text prompts
-  into realistic, anime, fantasy and cinematic artwork in seconds.
-</p>
+            <p className="mt-6 text-gray-400 text-lg">
+              Turn your imagination into stunning artwork in seconds.
+            </p>
+
             {/* =========================================
                 PLAN CARD
             ========================================= */}
@@ -482,19 +482,15 @@ export default function Home() {
 
             <div className="text-center mb-14">
 
-       <h2 className="text-5xl font-bold">
+              <h2 className="text-5xl font-bold">
 
-  Why Choose
+                Why Choose
 
-  <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-    {" "}Nexora AI
-  </span>
+                <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+                  {" "}Nexora AI
+                </span>
 
-  <span className="block mt-2 text-3xl text-gray-300">
-    AI Image Generator
-  </span>
-
-</h2>
+              </h2>
 
               <p className="text-gray-400 mt-5 text-lg">
                 Everything you need to create stunning AI artwork.
@@ -615,209 +611,7 @@ export default function Home() {
             </div>
 
           </section>
-          {/* =========================================
-              SEO CONTENT
-          ========================================= */}
 
-          <section className="mt-28 max-w-5xl mx-auto px-4">
-
-            <div className="rounded-3xl border border-gray-800 bg-gray-900/40 p-8 md:p-12">
-
-              <h2 className="text-4xl md:text-5xl font-bold text-center">
-                AI Image Generator Online
-              </h2>
-
-              <div className="mt-8 space-y-6 text-gray-400 text-lg leading-8">
-
-                <p>
-                  Nexora AI is an online AI image generator that turns
-                  simple text prompts into high-quality digital artwork.
-                  Describe the image you want and create original visuals
-                  in seconds without complicated design software.
-                </p>
-
-                <p>
-                  Use Nexora AI as an AI art generator for realistic
-                  photography, anime, fantasy artwork, cinematic scenes,
-                  characters, illustrations and creative concepts. You can
-                  experiment with different prompts and styles to create
-                  images for your projects.
-                </p>
-
-                <p>
-                  Whether you need images for social media, YouTube
-                  thumbnails, blog posts, advertising, presentations or
-                  personal projects, Nexora AI makes AI image creation
-                  simple and accessible from your browser.
-                </p>
-
-              </div>
-
-              <div className="mt-10 grid gap-6 md:grid-cols-2">
-
-                <div className="rounded-2xl border border-gray-800 bg-black/30 p-6">
-
-                  <h3 className="text-2xl font-bold text-white">
-                    Create Images From Text
-                  </h3>
-
-                  <p className="mt-3 text-gray-400">
-                    Enter a detailed text prompt and transform your idea
-                    into an AI-generated image.
-                  </p>
-
-                </div>
-
-                <div className="rounded-2xl border border-gray-800 bg-black/30 p-6">
-
-                  <h3 className="text-2xl font-bold text-white">
-                    Explore Creative Styles
-                  </h3>
-
-                  <p className="mt-3 text-gray-400">
-                    Experiment with realistic, anime, fantasy, cinematic
-                    and other creative visual styles.
-                  </p>
-
-                </div>
-
-                <div className="rounded-2xl border border-gray-800 bg-black/30 p-6">
-
-                  <h3 className="text-2xl font-bold text-white">
-                    AI Art for Your Projects
-                  </h3>
-
-                  <p className="mt-3 text-gray-400">
-                    Create artwork for social media, websites, thumbnails,
-                    marketing campaigns and personal projects.
-                  </p>
-
-                </div>
-
-                <div className="rounded-2xl border border-gray-800 bg-black/30 p-6">
-
-                  <h3 className="text-2xl font-bold text-white">
-                    Create AI Images Online
-                  </h3>
-
-                  <p className="mt-3 text-gray-400">
-                    Generate images directly from your browser without
-                    installing complicated image-generation software.
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
-                    {/* =========================================
-              EXPLORE NEXORA AI TOOLS
-          ========================================= */}
-
-          <section className="mt-24 max-w-6xl mx-auto px-4">
-
-            <div className="text-center mb-12">
-
-              <h2 className="text-4xl md:text-5xl font-bold">
-                Explore Nexora AI Tools
-              </h2>
-
-              <p className="mt-4 text-lg text-gray-400">
-                Create, write, design and generate content with AI.
-              </p>
-
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-              <Link
-                href="/"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  🎨 AI Image Generator
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Create stunning AI images from text prompts.
-                </p>
-              </Link>
-
-              <Link
-                href="/video"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  🎬 AI Video Generator
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Create engaging videos with AI.
-                </p>
-              </Link>
-
-              <Link
-                href="/music"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  🎵 AI Music Generator
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Generate creative music and audio with AI.
-                </p>
-              </Link>
-
-              <Link
-                href="/logo"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  ✨ AI Logo Generator
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Create unique AI-generated logos and brand ideas.
-                </p>
-              </Link>
-
-              <Link
-                href="/writer"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  ✍️ AI Writer
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Write articles, ideas and content with AI.
-                </p>
-              </Link>
-
-              <Link
-                href="/chat"
-                className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 hover:border-purple-500 transition"
-              >
-                <h3 className="text-2xl font-bold">
-                  💬 AI Chat
-                </h3>
-                <p className="mt-3 text-gray-400">
-                  Chat with AI and get help with your ideas.
-                </p>
-              </Link>
-
-            </div>
-
-            <div className="mt-8 text-center">
-
-              <Link
-                href="/pricing"
-                className="inline-block rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-bold hover:scale-105 transition"
-              >
-                View AI Plans & Pricing →
-              </Link>
-
-            </div>
-
-          </section>
         </main>
 
       </div>

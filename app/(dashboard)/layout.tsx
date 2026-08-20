@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { supabase } from "@/lib/supabase/browser";
 import DashboardLayout from "../components/DashboardLayout";
 
@@ -14,21 +15,30 @@ export default function DashboardGroupLayout({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkUser();
-  }, []);
+    let mounted = true;
 
-  async function checkUser() {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    async function checkUser() {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
 
-    if (!user) {
-      router.replace("/login");
-      return;
+      if (!mounted) return;
+
+      if (error || !user) {
+        router.replace("/login");
+        return;
+      }
+
+      setLoading(false);
     }
 
-    setLoading(false);
-  }
+    checkUser();
+
+    return () => {
+      mounted = false;
+    };
+  }, [router]);
 
   if (loading) {
     return (
@@ -38,9 +48,5 @@ export default function DashboardGroupLayout({
     );
   }
 
-  return (
-    <DashboardLayout>
-      {children}
-    </DashboardLayout>
-  );
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

@@ -10,7 +10,7 @@ const plans = [
 
 import { useState } from "react";
 import Link from "next/link";
-
+import StrongTagAd from "../components/StrongTagAd";
 export default function PricingPage() {
 const handleCheckout = () => {
   window.location.href =
@@ -293,7 +293,9 @@ const handleCheckout = () => {
   </div>
 
 </section>
-
+<div className="flex justify-center my-8">
+  <StrongTagAd />
+</div>
 
 {/* Trust Section */}
 

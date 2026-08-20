@@ -26,14 +26,7 @@ export async function POST(req: Request) {
       );
     }
 
-    /*
-     * Music generation provider will be connected here.
-     *
-     * For now we return a clear response so we can
-     * test the complete frontend → API connection.
-     */
-
-    console.log("🎵 Music request:", {
+    console.log("🎵 Demo music request:", {
       userId: user.id,
       prompt,
       style,
@@ -43,21 +36,17 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Music API connection is ready.",
-      audio: null,
+      message: "Demo music generated successfully.",
+      audio: "/audio/demo-music.wav",
     });
   } catch (error: any) {
     console.error("Music API Error:", error);
 
     return NextResponse.json(
       {
-        error:
-          error?.message ||
-          "Music generation failed.",
+        error: error?.message || "Music generation failed.",
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
