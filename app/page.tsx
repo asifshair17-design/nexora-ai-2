@@ -1,5 +1,3 @@
-// Redeploy
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,7 +10,6 @@ import PromptBox from "./components/PromptBox";
 import ImageCard from "./components/ImageCard";
 import ImageHistory from "./components/ImageHistory";
 import Footer from "./components/Footer";
-import MonetagAd from "./components/MonetagAd";
 
 import toast from "react-hot-toast";
 
@@ -315,7 +312,6 @@ export default function Home() {
                 </h2>
 
                 {plan === "pro" ? (
-
                   <div className="mt-6 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-5">
 
                     <p className="text-2xl font-bold text-yellow-400">
@@ -343,9 +339,7 @@ export default function Home() {
                     </ul>
 
                   </div>
-
                 ) : (
-
                   <>
                     <div className="mt-6 flex justify-between text-gray-300">
 
@@ -384,7 +378,6 @@ export default function Home() {
                       🚀 Upgrade to Pro
                     </a>
                   </>
-
                 )}
 
               </div>
@@ -392,7 +385,6 @@ export default function Home() {
             </div>
 
           </div>
-
 
           {/* =========================================
               PROMPT BOX
@@ -418,30 +410,11 @@ export default function Home() {
 
           </div>
 
-
-          {/* =========================================
-              SINGLE MONETAG AD
-              FREE USERS ONLY
-              
-              Position:
-              Prompt Box
-                    ↓
-                  AD
-                    ↓
-              Generated Image
-          ========================================= */}
-
-          {plan !== "pro" && (
-            <MonetagAd />
-          )}
-
-
           {/* =========================================
               GENERATED IMAGE
           ========================================= */}
 
           {image && (
-
             <div className="flex justify-center mt-10">
 
               <ImageCard
@@ -450,9 +423,7 @@ export default function Home() {
               />
 
             </div>
-
           )}
-
 
           {/* =========================================
               IMAGE HISTORY
@@ -489,7 +460,6 @@ export default function Home() {
 
           </div>
 
-
           {/* =========================================
               WHY CHOOSE NEXORA AI
           ========================================= */}
@@ -514,11 +484,9 @@ export default function Home() {
 
             </div>
 
-
             <div className="grid md:grid-cols-3 gap-8">
 
               {/* CARD 1 */}
-
               <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
@@ -535,9 +503,7 @@ export default function Home() {
 
               </div>
 
-
               {/* CARD 2 */}
-
               <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
@@ -554,9 +520,7 @@ export default function Home() {
 
               </div>
 
-
               {/* CARD 3 */}
-
               <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
@@ -573,9 +537,7 @@ export default function Home() {
 
               </div>
 
-
               {/* CARD 4 */}
-
               <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
@@ -592,9 +554,7 @@ export default function Home() {
 
               </div>
 
-
               {/* CARD 5 */}
-
               <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
@@ -611,10 +571,8 @@ export default function Home() {
 
               </div>
 
-
               {/* CARD 6 */}
-
-              <div className="rounded-3xl border border-gray-800 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
+              <div className="rounded-3xl border border-gray-800 bg-gray-900/50 bg-gray-900/50 p-8 hover:border-purple-500 transition-all duration-300 hover:-translate-y-2">
 
                 <div className="text-5xl mb-5">
                   🌍
@@ -637,7 +595,6 @@ export default function Home() {
         </main>
 
       </div>
-
 
       {/* =========================================
           FOOTER

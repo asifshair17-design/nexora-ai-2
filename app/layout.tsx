@@ -29,21 +29,11 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <head>
-        {/* Monetag Verification */}
-        <meta
-          name="monetag"
-          content="b88c44f6872536113977ee1491d80073"
-        />
-      </head>
-
       <body>
         {children}
 
-        {/* WhatsApp Button */}
         <WhatsAppButton />
 
-        {/* Toast Notifications */}
         <Toaster
           richColors
           position="top-right"
