@@ -1,9 +1,9 @@
-
 import WhatsAppButton from "./components/WhatsAppButton";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,16 +29,23 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-     <body>
-  {children}
+      <head>
+        <meta
+          name="monetag"
+          content="b88c44f6872536113977ee1491d80073"
+        />
+      </head>
 
-  <WhatsAppButton />
+      <body>
+        {children}
 
-  <Toaster
-  richColors
-  position="top-right"
-/>
-</body>
+        <WhatsAppButton />
+
+        <Toaster
+          richColors
+          position="top-right"
+        />
+      </body>
     </html>
   );
 }
