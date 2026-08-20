@@ -2,12 +2,7 @@ import { NextResponse } from "next/server";
 import Whop from "@whop/sdk";
 import { supabaseAdmin } from "../../../../lib/supabase-admin";
 
-const whop = new Whop({
-  webhookKey: process.env.WHOP_WEBHOOK_SECRET
-    ? btoa(process.env.WHOP_WEBHOOK_SECRET)
-    : undefined,
-});
-
+const whop = new Whop();
 const PLAN_MAP: Record<
   string,
   {
