@@ -814,12 +814,12 @@ export default function Home() {
               >
                 View AI Plans & Pricing →
               </Link>
-<div className="mt-6 text-center">
+<div className="mt-8 text-center">
   <Link
     href="/about"
-    className="text-gray-400 hover:text-purple-400 transition"
+    className="inline-block rounded-2xl border border-purple-600/50 bg-purple-900/20 px-8 py-4 text-lg font-bold text-purple-300 transition hover:border-purple-500 hover:bg-purple-600 hover:text-white hover:scale-105"
   >
-    About Nexora AI →
+    ✨ About Nexora AI →
   </Link>
 </div>
             </div>
