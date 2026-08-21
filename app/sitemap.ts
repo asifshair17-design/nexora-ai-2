@@ -88,5 +88,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   changeFrequency: "monthly",
   priority: 0.8,
 },
+{
+  url: "https://nexora-ai-2-five.vercel.app/ai-writer",
+  lastModified: new Date(),
+  changeFrequency: "weekly",
+  priority: 0.8,
+},
   ];
 }
