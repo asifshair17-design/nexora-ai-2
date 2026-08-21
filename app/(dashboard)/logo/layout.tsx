@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free AI Logo Generator – Create Logos with AI | Nexora AI",
+  title: "Free AI Logo Generator – Create Logos with AI",
 
   description:
     "Create professional logos with Nexora AI's free AI logo generator. Generate unique logo ideas for businesses, brands, websites and social media online.",
@@ -36,7 +36,7 @@ title: "Free AI Logo Generator – Create Logos with AI",
 
   twitter: {
     card: "summary_large_image",
-    title: "Free AI Logo Generator – Create Logos with AI | Nexora AI",
+    title: "Free AI Logo Generator – Create Logos with AI",
     description:
       "Create professional AI logos for businesses and brands with Nexora AI.",
   },
