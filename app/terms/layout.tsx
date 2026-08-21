@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Nexora AI",
+  title: "Terms of Service",
   description:
     "Read the Nexora AI Terms of Service covering accounts, AI-generated content, subscriptions, acceptable use and use of the Nexora AI platform.",
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Terms of Service | Nexora AI",
+    title: "Terms of Service",
     description:
       "Review the Terms of Service for using Nexora AI, including accounts, AI-generated content and subscriptions.",
     url: "https://nexora-ai-2-five.vercel.app/terms",

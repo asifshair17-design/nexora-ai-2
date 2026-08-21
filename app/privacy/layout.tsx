@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Nexora AI",
+  title: "Privacy Policy",
   description:
     "Read the Nexora AI Privacy Policy to learn how we collect, use, protect and manage your personal information and account data.",
 
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Privacy Policy | Nexora AI",
+    title: "Privacy Policy",
     description:
       "Learn how Nexora AI collects, uses and protects your personal information and account data.",
     url: "https://nexora-ai-2-five.vercel.app/privacy",

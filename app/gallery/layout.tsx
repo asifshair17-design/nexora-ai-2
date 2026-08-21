@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AI Image Gallery – Explore AI Generated Art | Nexora AI",
+    title: "AI Image Gallery – Explore AI Generated Art",
     description:
       "Explore realistic, anime, fantasy, cinematic and creative AI generated artwork with Nexora AI.",
     url: "https://nexora-ai-2-five.vercel.app/gallery",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "AI Image Gallery – Explore AI Generated Art | Nexora AI",
+    title: "AI Image Gallery – Explore AI Generated Art",
     description:
       "Explore AI generated images and creative artwork made with Nexora AI.",
   },

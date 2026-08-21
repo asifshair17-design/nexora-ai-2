@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AI Writer – Free AI Writing Tool | Nexora AI",
+    title: "AI Writer – Free AI Writing Tool",
     description:
       "Create articles, blog posts, marketing copy and social media content with Nexora AI Writer.",
     url: "https://nexora-ai-2-five.vercel.app/writer",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "AI Writer – Free AI Writing Tool | Nexora AI",
+    title: "AI Writer – Free AI Writing Tool",
     description:
       "Create high-quality articles, blog posts and marketing content with Nexora AI Writer.",
   },
