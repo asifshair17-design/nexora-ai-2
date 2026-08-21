@@ -101,6 +101,46 @@ export default function RootLayout({
           name="monetag"
           content="b88c44f6872536113977ee1491d80073"
         />
+        <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://nexora-ai-2-five.vercel.app/#organization",
+          name: "Nexora AI",
+          url: "https://nexora-ai-2-five.vercel.app/",
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://nexora-ai-2-five.vercel.app/#website",
+          url: "https://nexora-ai-2-five.vercel.app/",
+          name: "Nexora AI",
+          publisher: {
+            "@id":
+              "https://nexora-ai-2-five.vercel.app/#organization",
+          },
+        },
+        {
+          "@type": "SoftwareApplication",
+          name: "Nexora AI",
+          applicationCategory: "MultimediaApplication",
+          operatingSystem: "Web",
+          url: "https://nexora-ai-2-five.vercel.app/",
+          description:
+            "AI creative tools for generating images, logos, videos, music and written content.",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        },
+      ],
+    }),
+  }}
+/>
       </head>
 
       <body>
