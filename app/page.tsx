@@ -712,6 +712,26 @@ export default function Home() {
             </div>
 
           </section>
+          <section className="mt-24 max-w-5xl mx-auto px-4">
+  <div className="rounded-3xl border border-purple-800 bg-purple-950/20 p-10 text-center">
+    <h2 className="text-4xl font-bold">
+      AI Image Generator Online
+    </h2>
+
+    <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-gray-400">
+      Learn more about Nexora AI's AI image generator and discover how
+      to create realistic, anime, fantasy and cinematic images from text
+      prompts.
+    </p>
+
+    <Link
+      href="/ai-image-generator"
+      className="mt-8 inline-block rounded-xl bg-purple-600 px-7 py-4 font-bold hover:bg-purple-700 transition"
+    >
+      Explore AI Image Generator →
+    </Link>
+  </div>
+</section>
                     {/* =========================================
               EXPLORE NEXORA AI TOOLS
           ========================================= */}
