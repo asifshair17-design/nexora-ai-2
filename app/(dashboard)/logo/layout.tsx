@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Free AI Logo Generator – Create Logos with AI | Nexora AI",
+title: "Free AI Logo Generator – Create Logos with AI",
     description:
       "Create professional AI logos for businesses, brands, websites and social media with Nexora AI.",
     url: "https://nexora-ai-2-five.vercel.app/logo",
