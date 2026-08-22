@@ -6,8 +6,7 @@ import { supabase } from "@/lib/supabase/browser";
 import { getPlan } from "@/lib/plans/limits";
 
 type Profile = {
-  full_name: string | null;
-  avatar_url: string | null;
+  email: string | null;
   credits: number;
   plan: "free" | "pro";
 };
@@ -26,11 +25,16 @@ export default function Topbar() {
 
     if (!user) return;
 
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
-      .select("full_name, avatar_url, credits, plan")
+      .select("email, credits, plan")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
+
+    if (error) {
+      console.error("Topbar profile error:", error.message);
+      return;
+    }
 
     if (data) {
       setProfile(data as Profile);
@@ -39,13 +43,15 @@ export default function Topbar() {
 
   const plan = getPlan(profile?.plan || "free");
 
+  const displayName =
+    profile?.email?.split("@")[0] || "User";
+
   return (
     <header className="sticky top-0 z-50 flex h-24 items-center justify-between border-b border-gray-800 bg-black/80 px-10 backdrop-blur-xl">
 
       {/* Left */}
 
       <div>
-
         <h2 className="text-3xl font-black">
           Welcome Back 👋
         </h2>
@@ -53,7 +59,6 @@ export default function Topbar() {
         <p className="mt-1 text-gray-400">
           Create amazing AI content today.
         </p>
-
       </div>
 
       {/* Right */}
@@ -88,22 +93,20 @@ export default function Topbar() {
 
         </div>
 
-        {/* Avatar */}
+        {/* Profile */}
 
         <Link href="/profile">
 
           <div className="flex cursor-pointer items-center gap-4 rounded-2xl bg-gray-900 px-5 py-3 transition hover:bg-gray-800">
 
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-xl font-bold">
-              {profile?.full_name
-                ? profile.full_name.charAt(0).toUpperCase()
-                : "U"}
+              {displayName.charAt(0).toUpperCase()}
             </div>
 
             <div>
 
               <p className="font-bold">
-                {profile?.full_name || "User"}
+                {displayName}
               </p>
 
               <p className="text-sm text-gray-500">

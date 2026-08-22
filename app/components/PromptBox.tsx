@@ -79,9 +79,17 @@ onGenerate,
 
       </div>
 
-      <button
-        onClick={onGenerate}
-        disabled={loading}
+     <button
+  onClick={() => {
+    window.open(
+      "https://omg10.com/4/11617241",
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    onGenerate();
+  }}
+  disabled={loading}
        className="mt-8 w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-4 text-lg font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? (

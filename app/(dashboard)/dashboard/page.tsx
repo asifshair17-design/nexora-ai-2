@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/browser";
 import { getPlan } from "@/lib/plans/limits";
@@ -44,33 +43,37 @@ export default function DashboardPage() {
     // Profile
     // -------------------------
 
- const { data: profileData, error: profileError } =
-  await supabase
-    .from("profiles")
-    .select("plan, credits, pro_expires_at")
-    .eq("id", user.id)
-    .maybeSingle();
+    const {
+      data: profileData,
+      error: profileError,
+    } = await supabase
+      .from("profiles")
+      .select("plan, credits, pro_expires_at")
+      .eq("id", user.id)
+      .maybeSingle();
 
-if (profileError) {
-  console.error("Profile error:", profileError.message);
-}
+    if (profileError) {
+      console.error("Profile error:", profileError.message);
+    }
 
-if (profileData) {
-  setProfile(profileData);
-}
+    if (profileData) {
+      setProfile(profileData);
+    }
 
     // -------------------------
     // Total Images
     // -------------------------
 
-    const { count: imageTotal, error: imageError } =
-      await supabase
-        .from("images")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id);
+    const {
+      count: imageTotal,
+      error: imageError,
+    } = await supabase
+      .from("images")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id);
 
     if (imageError) {
       console.error("Image count error:", imageError);
@@ -82,14 +85,16 @@ if (profileData) {
     // Total Videos
     // -------------------------
 
-    const { count: videoTotal, error: videoError } =
-      await supabase
-        .from("videos")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id);
+    const {
+      count: videoTotal,
+      error: videoError,
+    } = await supabase
+      .from("videos")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id);
 
     if (videoError) {
       console.error("Video count error:", videoError);
@@ -105,15 +110,17 @@ if (profileData) {
 
     startOfDay.setHours(0, 0, 0, 0);
 
-    const { count: usageCount, error: usageError } =
-      await supabase
-        .from("usage")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id)
-        .gte("created_at", startOfDay.toISOString());
+    const {
+      count: usageCount,
+      error: usageError,
+    } = await supabase
+      .from("usage")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id)
+      .gte("created_at", startOfDay.toISOString());
 
     if (usageError) {
       console.error("Usage error:", usageError);
@@ -125,15 +132,17 @@ if (profileData) {
     // Favorite Images
     // -------------------------
 
-    const { count: favorites, error: favoriteError } =
-      await supabase
-        .from("images")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id)
-        .eq("favorite", true);
+    const {
+      count: favorites,
+      error: favoriteError,
+    } = await supabase
+      .from("images")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id)
+      .eq("favorite", true);
 
     if (favoriteError) {
       console.error("Favorite error:", favoriteError);
@@ -145,15 +154,17 @@ if (profileData) {
     // Recent Images
     // -------------------------
 
-    const { data: recentImages, error: recentError } =
-      await supabase
-        .from("images")
-        .select("id, prompt, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", {
-          ascending: false,
-        })
-        .limit(5);
+    const {
+      data: recentImages,
+      error: recentError,
+    } = await supabase
+      .from("images")
+      .select("id, prompt, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", {
+        ascending: false,
+      })
+      .limit(5);
 
     if (recentError) {
       console.error("Recent images error:", recentError);
@@ -182,6 +193,7 @@ if (profileData) {
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
 
         <div>
+
           <p className="text-lg font-semibold text-purple-400">
             👋 Welcome Back
           </p>
@@ -197,34 +209,25 @@ if (profileData) {
 
           <div className="mt-8 flex flex-wrap gap-4">
 
-            <Link
-              href="/"
-              className="rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-7 py-4 font-bold transition hover:scale-105"
-            >
-              ✨ Generate Image
-            </Link>
+            {/* UPGRADE AD BUTTON */}
 
-            <Link
-              href="/video"
-              className="rounded-xl bg-blue-600 px-7 py-4 font-bold transition hover:bg-blue-700"
-            >
-              🎬 Generate Video
-            </Link>
-
-            <Link
-              href="/pricing"
-              className="rounded-xl border border-purple-500 px-7 py-4 font-bold transition hover:bg-purple-700/20"
-            >
-              💎 Upgrade
-            </Link>
+           <Link
+  href="/pricing"
+  className="rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-7 py-4 font-bold transition hover:scale-105 hover:shadow-lg hover:shadow-purple-500/30"
+>
+  💎 Upgrade to Pro
+</Link>
 
           </div>
+
         </div>
 
         <div className="hidden lg:flex">
+
           <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-7xl shadow-2xl shadow-purple-500/30">
             🤖
           </div>
+
         </div>
 
       </div>
@@ -257,15 +260,19 @@ if (profileData) {
           </h2>
 
           {profile?.plan === "pro" ? (
+
             <p className="mt-4 text-gray-400">
               You have access to unlimited AI
               generations.
             </p>
+
           ) : (
+
             <p className="mt-4 text-gray-400">
               Use your free credits to create AI
               images and videos.
             </p>
+
           )}
 
         </div>
@@ -391,24 +398,31 @@ if (profileData) {
             </h2>
 
             <p className="mt-2 text-gray-400">
+
               {todayUsage} of{" "}
+
               {profile?.plan === "pro"
                 ? "∞"
                 : plan.dailyImages}{" "}
+
               daily image generations used
+
             </p>
 
           </div>
 
           <span className="font-bold text-purple-400">
+
             {profile?.plan === "pro"
               ? "Unlimited"
               : `${usagePercentage}%`}
+
           </span>
 
         </div>
 
         {profile?.plan !== "pro" && (
+
           <div className="mt-6 h-4 overflow-hidden rounded-full bg-gray-800">
 
             <div
@@ -419,6 +433,7 @@ if (profileData) {
             />
 
           </div>
+
         )}
 
       </div>
@@ -507,9 +522,11 @@ if (profileData) {
                   </div>
 
                   <span className="shrink-0 text-sm text-gray-500">
+
                     {new Date(
                       activity.created_at
                     ).toLocaleDateString()}
+
                   </span>
 
                 </div>
@@ -537,10 +554,13 @@ if (profileData) {
 
         <div className="mt-6 grid gap-5 md:grid-cols-3">
 
+          {/* Create Image */}
+
           <Link
             href="/"
             className="rounded-3xl border border-gray-800 bg-gray-900/60 p-7 transition hover:-translate-y-1 hover:border-purple-500"
           >
+
             <div className="text-4xl">
               🎨
             </div>
@@ -552,13 +572,17 @@ if (profileData) {
             <p className="mt-2 text-gray-400">
               Turn a prompt into an AI image.
             </p>
+
           </Link>
 
+
+          {/* Create Video */}
 
           <Link
             href="/video"
             className="rounded-3xl border border-gray-800 bg-gray-900/60 p-7 transition hover:-translate-y-1 hover:border-blue-500"
           >
+
             <div className="text-4xl">
               🎬
             </div>
@@ -570,25 +594,29 @@ if (profileData) {
             <p className="mt-2 text-gray-400">
               Create cinematic AI video content.
             </p>
+
           </Link>
 
+{/* Upgrade Plan */}
 
-          <Link
-            href="/pricing"
-            className="rounded-3xl border border-gray-800 bg-gray-900/60 p-7 transition hover:-translate-y-1 hover:border-yellow-500"
-          >
-            <div className="text-4xl">
-              💎
-            </div>
+<Link
+  href="/pricing"
+  className="rounded-3xl border border-gray-800 bg-gray-900/60 p-7 transition hover:-translate-y-1 hover:border-yellow-500"
+>
 
-            <h3 className="mt-4 text-xl font-bold">
-              Upgrade Plan
-            </h3>
+  <div className="text-4xl">
+    💎
+  </div>
 
-            <p className="mt-2 text-gray-400">
-              Get more credits and premium features.
-            </p>
-          </Link>
+  <h3 className="mt-4 text-xl font-bold">
+    Upgrade Plan
+  </h3>
+
+  <p className="mt-2 text-gray-400">
+    Get more credits and premium features.
+  </p>
+
+</Link>
 
         </div>
 
