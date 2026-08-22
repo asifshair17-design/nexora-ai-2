@@ -32,7 +32,11 @@ const aiLinks = [
     icon: "✍",
     href: "/writer",
   },
-
+{
+  title: "User Reviews",
+  icon: "⭐",
+  href: "/reviews",
+},
   {
     title: "AI Chat",
     icon: "💬",
