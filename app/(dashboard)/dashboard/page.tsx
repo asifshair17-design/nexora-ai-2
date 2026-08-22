@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/browser";
 import { getPlan } from "@/lib/plans/limits";
@@ -43,20 +44,20 @@ export default function DashboardPage() {
     // Profile
     // -------------------------
 
-    const { data: profileData, error: profileError } =
-      await supabase
-        .from("profiles")
-        .select("plan, credits, pro_expires_at")
-        .eq("id", user.id)
-        .single();
+ const { data: profileData, error: profileError } =
+  await supabase
+    .from("profiles")
+    .select("plan, credits, pro_expires_at")
+    .eq("id", user.id)
+    .maybeSingle();
 
-    if (profileError) {
-      console.error("Profile error:", profileError);
-    }
+if (profileError) {
+  console.error("Profile error:", profileError.message);
+}
 
-    if (profileData) {
-      setProfile(profileData);
-    }
+if (profileData) {
+  setProfile(profileData);
+}
 
     // -------------------------
     // Total Images

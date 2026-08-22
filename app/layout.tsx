@@ -1,5 +1,6 @@
 import WhatsAppButton from "./components/WhatsAppButton";
 import type { Metadata } from "next";
+import Script from "next/script";
 
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -101,6 +102,18 @@ export default function RootLayout({
           name="monetag"
           content="b88c44f6872536113977ee1491d80073"
         />
+        <Script
+  id="monetag-zone-11624956"
+  strategy="afterInteractive"
+  dangerouslySetInnerHTML={{
+    __html: `
+      (function(s){
+        s.dataset.zone='11624956';
+        s.src='https://al5sm.com/tag.min.js';
+      })(document.body.appendChild(document.createElement('script')));
+    `,
+  }}
+/>
         <script
   type="application/ld+json"
   dangerouslySetInnerHTML={{

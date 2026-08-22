@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import { supabase } from "@/lib/supabase/browser";
 import { getPlan } from "@/lib/plans/limits";
 
@@ -60,37 +61,61 @@ export default function ProfilePage() {
       );
     }
 
-    const { data: profileData } =
-      await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+   const {
+  data: profileData,
+  error: profileError,
+} = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .limit(1)
+  .maybeSingle();
 
-    if (profileData) {
-      setProfile(profileData);
+if (profileError) {
+  console.error("Profile error:", profileError.message);
+}
+
+if (profileData) {
+  setProfile(profileData);
+}
+    const {
+      count: totalImages,
+      error: imagesError,
+    } = await supabase
+      .from("images")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id);
+
+    if (imagesError) {
+      console.error(
+        "Images count error:",
+        imagesError
+      );
     }
-
-    const { count: totalImages } =
-      await supabase
-        .from("images")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id);
 
     setImageCount(totalImages || 0);
 
-    const { count: favorites } =
-      await supabase
-        .from("images")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .eq("user_id", user.id)
-        .eq("favorite", true);
+    const {
+      count: favorites,
+      error: favoritesError,
+    } = await supabase
+      .from("images")
+      .select("*", {
+        count: "exact",
+        head: true,
+      })
+      .eq("user_id", user.id)
+      .eq("favorite", true);
+
+    if (favoritesError) {
+      console.error(
+        "Favorites count error:",
+        favoritesError
+      );
+    }
 
     setFavoriteCount(favorites || 0);
 
@@ -110,7 +135,8 @@ export default function ProfilePage() {
   );
 
   return (
-<main className="min-h-screen bg-black text-white p-10">
+    <main className="min-h-screen bg-black p-10 text-white">
+
 
       <div className="mx-auto max-w-7xl">
 
@@ -118,7 +144,7 @@ export default function ProfilePage() {
 
         <div className="rounded-[36px] border border-purple-700/40 bg-gradient-to-r from-purple-900/20 via-gray-900 to-blue-900/20 p-10">
 
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+          <div className="flex flex-col items-center justify-between gap-10 lg:flex-row">
 
             <div className="flex items-center gap-8">
 
@@ -141,7 +167,7 @@ export default function ProfilePage() {
 
               <div>
 
-                <p className="text-purple-400 font-semibold">
+                <p className="font-semibold text-purple-400">
                   Welcome Back
                 </p>
 
@@ -170,7 +196,8 @@ export default function ProfilePage() {
           </div>
 
         </div>
-                {/* Statistics */}
+
+        {/* Statistics */}
 
         <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
 
@@ -275,7 +302,8 @@ export default function ProfilePage() {
           )}
 
         </div>
-                {/* Quick Actions */}
+
+        {/* Quick Actions */}
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
 
@@ -283,7 +311,9 @@ export default function ProfilePage() {
 
             <div className="cursor-pointer rounded-3xl border border-gray-800 bg-gray-900 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
 
-              <div className="text-5xl">🖼</div>
+              <div className="text-5xl">
+                🖼
+              </div>
 
               <h3 className="mt-5 text-2xl font-bold">
                 My Gallery
@@ -301,7 +331,9 @@ export default function ProfilePage() {
 
             <div className="cursor-pointer rounded-3xl border border-gray-800 bg-gray-900 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
 
-              <div className="text-5xl">📊</div>
+              <div className="text-5xl">
+                📊
+              </div>
 
               <h3 className="mt-5 text-2xl font-bold">
                 Dashboard
@@ -319,7 +351,9 @@ export default function ProfilePage() {
 
             <div className="cursor-pointer rounded-3xl border border-gray-800 bg-gray-900 p-8 transition-all duration-300 hover:-translate-y-2 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20">
 
-              <div className="text-5xl">💎</div>
+              <div className="text-5xl">
+                💎
+              </div>
 
               <h3 className="mt-5 text-2xl font-bold">
                 Pricing
@@ -335,6 +369,7 @@ export default function ProfilePage() {
 
         </div>
 
+      
         {/* Logout */}
 
         <div className="mt-12 flex justify-center">
@@ -352,6 +387,7 @@ export default function ProfilePage() {
         </div>
 
       </div>
+
     </main>
   );
 }
