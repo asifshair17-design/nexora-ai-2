@@ -489,40 +489,47 @@ function ReviewCard({ review }: { review: Review }) {
 }
 
 export default function ReviewsPage() {
-  useEffect(() => {
-    // Monetag #1
-    const script1 = document.createElement("script");
+useEffect(() => {
+  // Monetag #1
+  const script1 = document.createElement("script");
+  script1.src = "https://al5sm.com/tag.min.js";
+  script1.dataset.zone = "11632445";
+  script1.async = true;
 
-    script1.src = "https://al5sm.com/tag.min.js";
-    script1.dataset.zone = "11632445";
-    script1.async = true;
+  // Monetag #2
+  const script2 = document.createElement("script");
+  script2.src = "https://quge5.com/88/tag.min.js";
+  script2.dataset.zone = "272322";
+  script2.dataset.cfasync = "false";
+  script2.async = true;
 
-    // Monetag #2
-    const script2 = document.createElement("script");
+  // Monetag #3
+  const script3 = document.createElement("script");
+  script3.src = "https://quge5.com/88/tag.min.js";
+  script3.dataset.zone = "271724";
+  script3.dataset.cfasync = "false";
+  script3.async = true;
 
-    script2.src = "https://quge5.com/88/tag.min.js";
-    script2.dataset.zone = "272322";
-    script2.dataset.cfasync = "false";
-    script2.async = true;
+  // Monetag #4
+  const script4 = document.createElement("script");
+  script4.src = "https://al5sm.com/tag.min.js";
+  script4.dataset.zone = "11624956";
+  script4.async = true;
 
-    // Monetag #3
-    const script3 = document.createElement("script");
+  // Add all scripts
+  document.body.appendChild(script1);
+  document.body.appendChild(script2);
+  document.body.appendChild(script3);
+  document.body.appendChild(script4);
 
-    script3.src = "https://quge5.com/88/tag.min.js";
-    script3.dataset.zone = "271724";
-    script3.dataset.cfasync = "false";
-    script3.async = true;
-
-    document.body.appendChild(script1);
-    document.body.appendChild(script2);
-    document.body.appendChild(script3);
-
-    return () => {
-      script1.remove();
-      script2.remove();
-      script3.remove();
-    };
-  }, []);
+  // Remove them when leaving Reviews page
+  return () => {
+    script1.remove();
+    script2.remove();
+    script3.remove();
+    script4.remove();
+  };
+}, []);
 
   const averageRating =
     reviews.reduce(

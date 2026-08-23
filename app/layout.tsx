@@ -5,8 +5,6 @@ import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "sonner";
 
-
-
 export const metadata: Metadata = {
   metadataBase: new URL(
     "https://nexora-ai-2-five.vercel.app"
@@ -90,70 +88,66 @@ export const metadata: Metadata = {
     },
   },
 };
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-  <html lang="en">
+    <html lang="en">
       <head>
+        {/* Monetag verification only */}
         <meta
           name="monetag"
           content="b88c44f6872536113977ee1491d80073"
         />
-        <Script
-  id="monetag-zone-11624956"
-  strategy="afterInteractive"
-  dangerouslySetInnerHTML={{
-    __html: `
-      (function(s){
-        s.dataset.zone='11624956';
-        s.src='https://al5sm.com/tag.min.js';
-      })(document.body.appendChild(document.createElement('script')));
-    `,
-  }}
-/>
+
+        {/* Structured Data */}
         <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Organization",
-          "@id": "https://nexora-ai-2-five.vercel.app/#organization",
-          name: "Nexora AI",
-          url: "https://nexora-ai-2-five.vercel.app/",
-        },
-        {
-          "@type": "WebSite",
-          "@id": "https://nexora-ai-2-five.vercel.app/#website",
-          url: "https://nexora-ai-2-five.vercel.app/",
-          name: "Nexora AI",
-          publisher: {
-            "@id":
-              "https://nexora-ai-2-five.vercel.app/#organization",
-          },
-        },
-        {
-          "@type": "SoftwareApplication",
-          name: "Nexora AI",
-          applicationCategory: "MultimediaApplication",
-          operatingSystem: "Web",
-          url: "https://nexora-ai-2-five.vercel.app/",
-          description:
-            "AI creative tools for generating images, logos, videos, music and written content.",
-          offers: {
-            "@type": "Offer",
-            price: "0",
-            priceCurrency: "USD",
-          },
-        },
-      ],
-    }),
-  }}
-/>
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id":
+                    "https://nexora-ai-2-five.vercel.app/#organization",
+                  name: "Nexora AI",
+                  url: "https://nexora-ai-2-five.vercel.app/",
+                },
+                {
+                  "@type": "WebSite",
+                  "@id":
+                    "https://nexora-ai-2-five.vercel.app/#website",
+                  url: "https://nexora-ai-2-five.vercel.app/",
+                  name: "Nexora AI",
+                  publisher: {
+                    "@id":
+                      "https://nexora-ai-2-five.vercel.app/#organization",
+                  },
+                },
+                {
+                  "@type": "SoftwareApplication",
+                  name: "Nexora AI",
+                  applicationCategory:
+                    "MultimediaApplication",
+                  operatingSystem: "Web",
+                  url:
+                    "https://nexora-ai-2-five.vercel.app/",
+                  description:
+                    "AI creative tools for generating images, logos, videos, music and written content.",
+                  offers: {
+                    "@type": "Offer",
+                    price: "0",
+                    priceCurrency: "USD",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
       </head>
 
       <body>
