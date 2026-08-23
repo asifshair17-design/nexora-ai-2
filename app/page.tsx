@@ -49,7 +49,7 @@ const [remainingGenerations, setRemainingGenerations] =
     } = await supabase.auth.getUser();
 
     if (!user) return;
-
+setRemainingGenerations(null);
     const { data: creditData } = await supabase
       .from("profiles")
       .select("credits, plan")
@@ -372,28 +372,32 @@ return (
                 ) : (
 
                   <>
-                    <div className="mt-6 flex justify-between text-gray-300">
+                <div className="mt-6 flex justify-between text-gray-300">
+  <span>
+    Daily Generations
+  </span>
 
-                      <span>
-                        Daily Credits
-                      </span>
-
-                      <span className="font-bold">
-                        {credits} / 30
-                      </span>
-
-                    </div>
+  <span className="font-bold">
+    {remainingGenerations !== null
+      ? `${remainingGenerations} / 30`
+      : `${credits} / 30`}
+  </span>
+</div>
 
                     <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-gray-800">
 
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
-                        style={{
-                          width: `${Math.min(
-                            (credits / 30) * 100,
-                            100
-                          )}%`,
-                        }}
+                       style={{
+  width: `${
+    Math.min(
+      ((remainingGenerations !== null
+        ? remainingGenerations
+        : credits) / 30) * 100,
+      100
+    )
+  }%`,
+}}
                       />
 
                     </div>
