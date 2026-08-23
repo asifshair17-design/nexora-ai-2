@@ -26,29 +26,32 @@ export async function POST(req: Request) {
 
     const {
       prompt,
-      style,
-      size,
+      style = "Realistic",
+      size = "Square",
       provider = "basic",
       type = "image",
     } = body;
 
-    if (!prompt) {
+    if (!prompt || !prompt.trim()) {
       return NextResponse.json(
         {
-          error: "Prompt is required",
+          error: "Prompt is required.",
         },
         { status: 400 }
       );
     }
 
+    // Get current logged-in user if available
     const user = await getCurrentUser();
 
     const cookieStore = await cookies();
 
+    // =====================================================
+    // CREATE / GET ANONYMOUS VISITOR ID
+    // =====================================================
+
     let visitorId =
-      cookieStore.get(
-        "nexora_visitor_id"
-      )?.value;
+      cookieStore.get("nexora_visitor_id")?.value;
 
     let shouldSetCookie = false;
 
@@ -57,32 +60,39 @@ export async function POST(req: Request) {
       shouldSetCookie = true;
     }
 
-    // ========================================
+    // =====================================================
     // ANONYMOUS USER
-    // ========================================
+    // NO LOGIN REQUIRED
+    // 30 GENERATIONS PER DAY
+    // =====================================================
 
     if (!user) {
-      const used =
-        await getAnonymousTodayUsage(
-          visitorId
-        );
+      const used = await getAnonymousTodayUsage(
+        visitorId
+      );
 
-      if (
-        used >=
+      console.log(
+        "Anonymous visitor:",
+        visitorId,
+        "Used:",
+        used,
+        "Limit:",
         ANONYMOUS_DAILY_LIMIT
-      ) {
-        const response =
-          NextResponse.json(
-            {
-              error:
-                "You have used all 30 free generations for today.",
-              code:
-                "ANONYMOUS_DAILY_LIMIT",
-              remaining: 0,
-              requiresLogin: true,
-            },
-            { status: 403 }
-          );
+      );
+
+      // Already used 30
+      if (used >= ANONYMOUS_DAILY_LIMIT) {
+        const response = NextResponse.json(
+          {
+            success: false,
+            error:
+              "You have used all 30 free image generations for today.",
+            code: "ANONYMOUS_DAILY_LIMIT",
+            remaining: 0,
+            requiresLogin: true,
+          },
+          { status: 403 }
+        );
 
         if (shouldSetCookie) {
           response.cookies.set(
@@ -91,11 +101,9 @@ export async function POST(req: Request) {
             {
               httpOnly: true,
               secure:
-                process.env.NODE_ENV ===
-                "production",
+                process.env.NODE_ENV === "production",
               sameSite: "lax",
-              maxAge:
-                60 * 60 * 24 * 365,
+              maxAge: 60 * 60 * 24 * 365,
               path: "/",
             }
           );
@@ -104,7 +112,11 @@ export async function POST(req: Request) {
         return response;
       }
 
-      let finalPrompt = prompt;
+      // ===================================================
+      // PREPARE PROMPT
+      // ===================================================
+
+      let finalPrompt = prompt.trim();
 
       if (type === "logo") {
         finalPrompt = `
@@ -114,7 +126,6 @@ Style:
 ${style}
 
 Requirements:
-
 Vector Logo
 Transparent Background
 Premium Branding
@@ -126,14 +137,20 @@ ${prompt}
 `;
       }
 
-      // Anonymous visitors use the basic generator
-      const imageBuffer =
-        await generateImage(
-          finalPrompt,
-          style,
-          size,
-          false
-        );
+      // ===================================================
+      // GENERATE IMAGE
+      // ===================================================
+
+      const imageBuffer = await generateImage(
+        finalPrompt,
+        style,
+        size,
+        false
+      );
+
+      // ===================================================
+      // SAVE ANONYMOUS IMAGE
+      // ===================================================
 
       const imageUrl =
         await saveAnonymousGeneratedImage(
@@ -141,30 +158,37 @@ ${prompt}
           imageBuffer
         );
 
+      // ===================================================
+      // RECORD USAGE
+      // ===================================================
+
       await recordAnonymousUsage(
         visitorId
       );
 
-      const newUsed =
-        used + 1;
+      const newUsed = used + 1;
 
-      const remaining =
-        Math.max(
-          0,
-          ANONYMOUS_DAILY_LIMIT -
-            newUsed
-        );
+      const remaining = Math.max(
+        0,
+        ANONYMOUS_DAILY_LIMIT - newUsed
+      );
 
-      const response =
-        NextResponse.json({
-          success: true,
-          image: imageUrl,
-          anonymous: true,
-          used: newUsed,
-          remaining,
-          dailyLimit:
-            ANONYMOUS_DAILY_LIMIT,
-        });
+      // ===================================================
+      // RESPONSE
+      // ===================================================
+
+      const response = NextResponse.json({
+        success: true,
+        image: imageUrl,
+        anonymous: true,
+        used: newUsed,
+        remaining,
+        dailyLimit: ANONYMOUS_DAILY_LIMIT,
+      });
+
+      // ===================================================
+      // SAVE VISITOR COOKIE
+      // ===================================================
 
       if (shouldSetCookie) {
         response.cookies.set(
@@ -173,11 +197,9 @@ ${prompt}
           {
             httpOnly: true,
             secure:
-              process.env.NODE_ENV ===
-              "production",
+              process.env.NODE_ENV === "production",
             sameSite: "lax",
-            maxAge:
-              60 * 60 * 24 * 365,
+            maxAge: 60 * 60 * 24 * 365,
             path: "/",
           }
         );
@@ -186,9 +208,9 @@ ${prompt}
       return response;
     }
 
-    // ========================================
+    // =====================================================
     // LOGGED-IN USER
-    // ========================================
+    // =====================================================
 
     const plan = getPlan(
       user.plan === "pro"
@@ -197,9 +219,7 @@ ${prompt}
     );
 
     const todayUsage =
-      await getTodayUsage(
-        user.id
-      );
+      await getTodayUsage(user.id);
 
     if (
       todayUsage >=
@@ -217,12 +237,13 @@ ${prompt}
     const isPro =
       user.plan === "pro";
 
-    // Keep your existing credit calculation
+    // =====================================================
+    // CREDIT SYSTEM
+    // =====================================================
+
     const {
       getCreditCost,
-    } = await import(
-      "@/lib/credits"
-    );
+    } = await import("@/lib/credits");
 
     const creditCost =
       getCreditCost(
@@ -240,13 +261,17 @@ ${prompt}
       return NextResponse.json(
         {
           error:
-            "Not enough credits.",
+            "Not enough credits. Upgrade to Pro.",
         },
         { status: 403 }
       );
     }
 
-    let finalPrompt = prompt;
+    // =====================================================
+    // PREPARE PROMPT
+    // =====================================================
+
+    let finalPrompt = prompt.trim();
 
     if (type === "logo") {
       finalPrompt = `
@@ -256,7 +281,6 @@ Style:
 ${style}
 
 Requirements:
-
 Vector Logo
 Transparent Background
 Premium Branding
@@ -268,6 +292,10 @@ ${prompt}
 `;
     }
 
+    // =====================================================
+    // GENERATE LOGGED-IN IMAGE
+    // =====================================================
+
     const imageBuffer =
       await generateImage(
         finalPrompt,
@@ -276,6 +304,10 @@ ${prompt}
         isPro
       );
 
+    // =====================================================
+    // SAVE IMAGE
+    // =====================================================
+
     const imageUrl =
       await saveGeneratedImage(
         user.id,
@@ -283,9 +315,11 @@ ${prompt}
         finalPrompt
       );
 
-    await recordUsage(
-      user.id
-    );
+    // =====================================================
+    // RECORD USAGE
+    // =====================================================
+
+    await recordUsage(user.id);
 
     const updatedUsage =
       todayUsage + 1;
@@ -301,7 +335,10 @@ ${prompt}
           updatedUsage
       ),
       remainingCredits:
-        user.credits,
+        Math.max(
+          0,
+          user.credits - creditCost
+        ),
     });
 
   } catch (error: any) {
@@ -314,7 +351,7 @@ ${prompt}
       {
         error:
           error?.message ||
-          "Generation failed",
+          "Generation failed.",
       },
       { status: 500 }
     );
