@@ -32,8 +32,12 @@ export default function Home() {
   const [images, setImages] = useState<SavedImage[]>([]);
   const [search, setSearch] = useState("");
 
-  const [credits, setCredits] = useState(0);
-  const [plan, setPlan] = useState("Free");
+const [credits, setCredits] = useState(0);
+const [plan, setPlan] = useState("Free");
+
+// Anonymous visitors get 30 free generations per day
+const [remainingGenerations, setRemainingGenerations] =
+  useState<number | null>(30);
 
   useEffect(() => {
     loadImages();
@@ -126,27 +130,24 @@ export default function Home() {
     );
   }
 
-  async function handleGenerate() {
-    if (!prompt.trim()) {
-      toast.error("Please enter a prompt.");
-      return;
-    }
+async function handleGenerate() {
+  if (!prompt.trim()) {
+    toast.error("Please enter a prompt.");
+    return;
+  }
 
-    setLoading(true);
-    setProgress(10);
+  setLoading(true);
+  setProgress(10);
 
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-      setProgress(20);
+    setProgress(20);
 
-      if (!user) {
-        toast.error("Please login first.");
-        return;
-      }
-
+    // Logged-in users
+    if (user) {
       const {
         data: profile,
         error: profileError,
@@ -161,8 +162,12 @@ export default function Home() {
         return;
       }
 
+      setCredits(profile.credits);
+      setPlan(profile.plan);
+
       setProgress(35);
 
+      // Free logged-in users still use credits
       if (
         profile.plan !== "pro" &&
         profile.credits <= 0
@@ -170,50 +175,72 @@ export default function Home() {
         toast.error(
           "You have no credits left. Upgrade to Pro."
         );
+        return;
+      }
+    }
 
-        setLoading(false);
+    // Everyone can generate
+    setProgress(50);
+
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt,
+        style,
+        size,
+      }),
+    });
+
+    const result = await response.json();
+
+    setProgress(80);
+
+    if (!response.ok) {
+      if (result.code === "ANONYMOUS_DAILY_LIMIT") {
+        toast.error(
+          "🎉 You used all 30 free generations today. Sign up to continue!"
+        );
+
+        setRemainingGenerations(0);
         return;
       }
 
-      setProgress(50);
-
-      const response = await fetch(
-        "/api/generate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt,
-            style,
-            size,
-          }),
-        }
+      throw new Error(
+        result.error || "Generation failed"
       );
+    }
 
-      const result = await response.json();
+    // Image generated
+    setImage(result.image);
+    setProgress(100);
 
-      setProgress(80);
+    // Anonymous counter
+    if (
+      result.anonymous === true &&
+      typeof result.remaining === "number"
+    ) {
+      setRemainingGenerations(result.remaining);
+    }
 
-      if (!response.ok) {
-        throw new Error(
-          result.error || "Generation failed"
-        );
-      }
+    // Logged-in credits
+    if (
+      !result.anonymous &&
+      typeof result.remainingCredits === "number"
+    ) {
+      setCredits(result.remainingCredits);
+    }
 
-      setImage(result.image);
+    toast.success(
+      result.anonymous
+        ? `Image generated! ${result.remaining} free generations remaining today.`
+        : "Image generated successfully!"
+    );
 
-      setProgress(100);
-
-      toast.success(
-        "Image generated successfully!"
-      );
-
-      setCredits(
-        result.remainingCredits
-      );
-
+    // Save only for logged-in users
+    if (user) {
       const {
         data: insertedImage,
         error,
@@ -237,23 +264,24 @@ export default function Home() {
       if (error) {
         console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Something went wrong.");
-      }
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        setProgress(0);
-      }, 400);
     }
-  }
+  } catch (error) {
+    console.error(error);
 
-  return (
+    if (error instanceof Error) {
+      toast.error(error.message);
+    } else {
+      toast.error("Something went wrong.");
+    }
+  } finally {
+    setTimeout(() => {
+      setLoading(false);
+      setProgress(0);
+    }, 400);
+  }
+}
+
+return (
     <>
       <Navbar />
 
@@ -396,17 +424,18 @@ export default function Home() {
 
           <div className="flex justify-center mt-16">
 
-            <PromptBox
-              prompt={prompt}
-              setPrompt={setPrompt}
-              style={style}
-              setStyle={setStyle}
-              size={size}
-              setSize={setSize}
-              loading={loading}
-              progress={progress}
-              onGenerate={handleGenerate}
-            />
+         <PromptBox
+  prompt={prompt}
+  setPrompt={setPrompt}
+  style={style}
+  setStyle={setStyle}
+  size={size}
+  setSize={setSize}
+  loading={loading}
+  progress={progress}
+  onGenerate={handleGenerate}
+  remainingGenerations={remainingGenerations}
+/>
 
           </div>
 

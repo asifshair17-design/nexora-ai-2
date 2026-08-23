@@ -9,8 +9,10 @@ type PromptBoxProps = {
   setSize: (value: string) => void;
 
   loading: boolean;
-progress: number;
-onGenerate: () => void;
+  progress: number;
+  onGenerate: () => void;
+
+  remainingGenerations?: number | null;
 };
 
 export default function PromptBox({
@@ -21,8 +23,9 @@ export default function PromptBox({
   size,
   setSize,
   loading,
-progress,
-onGenerate,
+  progress,
+  onGenerate,
+  remainingGenerations,
 }: PromptBoxProps) {
   return (
     <div className="w-full max-w-4xl rounded-3xl bg-gray-900 border border-gray-800 p-8">
@@ -81,6 +84,18 @@ onGenerate,
 
      <button
   onClick={() => {
+    {remainingGenerations !== null &&
+  remainingGenerations !== undefined && (
+    <div className="mt-6 rounded-xl border border-purple-500/20 bg-purple-500/10 p-4 text-center">
+      <p className="text-sm text-gray-300">
+        🎨 Free generations remaining today
+      </p>
+
+      <p className="mt-1 text-2xl font-bold text-white">
+        {remainingGenerations}/30
+      </p>
+    </div>
+  )}
     window.open(
       "https://omg10.com/4/11617241",
       "_blank",

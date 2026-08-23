@@ -9,19 +9,21 @@ export async function saveGeneratedImage(
 
   const fileName = `${userId}/${Date.now()}.webp`;
 
-const { data, error: uploadError } = await supabase.storage
-  .from("generated-images")
-  .upload(fileName, imageBuffer, {
-    contentType: "image/webp",
-    upsert: true,
-  });
+  const { data, error: uploadError } =
+    await supabase.storage
+      .from("generated-images")
+      .upload(fileName, imageBuffer, {
+        contentType: "image/webp",
+        upsert: true,
+      });
 
-console.log("UPLOAD DATA:", data);
-console.log("UPLOAD ERROR:", uploadError);
+  console.log("UPLOAD DATA:", data);
+  console.log("UPLOAD ERROR:", uploadError);
 
-if (uploadError) {
-  throw uploadError;
-}
+  if (uploadError) {
+    throw uploadError;
+  }
+
   const {
     data: { publicUrl },
   } = supabase.storage
@@ -39,6 +41,49 @@ if (uploadError) {
   if (error) {
     console.error(error);
   }
+
+  return publicUrl;
+}
+
+// ==========================================
+// ANONYMOUS IMAGE
+// ==========================================
+
+export async function saveAnonymousGeneratedImage(
+  visitorId: string,
+  imageBuffer: Buffer
+) {
+  const supabase = await createServerSupabase();
+
+  const fileName =
+    `anonymous/${visitorId}/${Date.now()}.webp`;
+
+  const { data, error } = await supabase.storage
+    .from("generated-images")
+    .upload(fileName, imageBuffer, {
+      contentType: "image/webp",
+      upsert: true,
+    });
+
+  console.log(
+    "ANONYMOUS UPLOAD DATA:",
+    data
+  );
+
+  console.log(
+    "ANONYMOUS UPLOAD ERROR:",
+    error
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage
+    .from("generated-images")
+    .getPublicUrl(fileName);
 
   return publicUrl;
 }
