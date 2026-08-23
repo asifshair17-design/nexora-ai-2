@@ -1,6 +1,5 @@
 import WhatsAppButton from "./components/WhatsAppButton";
 import type { Metadata } from "next";
-import Script from "next/script";
 
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -56,7 +55,8 @@ export const metadata: Metadata = {
     description:
       "Create stunning AI images, logos, videos, music and creative content with Nexora AI.",
 
-    url: "https://nexora-ai-2-five.vercel.app/",
+    url:
+      "https://nexora-ai-2-five.vercel.app/",
 
     siteName: "Nexora AI",
 
@@ -91,13 +91,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
       <head>
-        {/* Monetag verification only */}
+        {/* Monetag verification only.
+            No Monetag ad scripts are loaded here. */}
         <meta
           name="monetag"
           content="b88c44f6872536113977ee1491d80073"
@@ -115,19 +116,23 @@ export default function RootLayout({
                   "@id":
                     "https://nexora-ai-2-five.vercel.app/#organization",
                   name: "Nexora AI",
-                  url: "https://nexora-ai-2-five.vercel.app/",
+                  url:
+                    "https://nexora-ai-2-five.vercel.app/",
                 },
+
                 {
                   "@type": "WebSite",
                   "@id":
                     "https://nexora-ai-2-five.vercel.app/#website",
-                  url: "https://nexora-ai-2-five.vercel.app/",
+                  url:
+                    "https://nexora-ai-2-five.vercel.app/",
                   name: "Nexora AI",
                   publisher: {
                     "@id":
                       "https://nexora-ai-2-five.vercel.app/#organization",
                   },
                 },
+
                 {
                   "@type": "SoftwareApplication",
                   name: "Nexora AI",
