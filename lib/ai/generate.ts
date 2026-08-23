@@ -36,6 +36,10 @@ function buildPrompt(
   }`;
 }
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function generateImage(
   prompt: string,
   style: string,
@@ -44,14 +48,58 @@ export async function generateImage(
 ) {
   const enhancedPrompt = buildPrompt(prompt, style);
 
+  // ==========================================
+  // PRO USERS
+  // ==========================================
+
   if (isPro) {
     console.log("⭐ Using OpenAI Image API");
-    return await generateOpenAIImage(enhancedPrompt);
+
+    return await generateOpenAIImage(
+      enhancedPrompt
+    );
   }
 
+  // ==========================================
+  // FREE / ANONYMOUS USERS
+  // ==========================================
+
   console.log("🆓 Using Pollinations AI");
-  return await generatePollinationsImage(
-    enhancedPrompt,
-    style
+
+  let lastError: unknown = null;
+
+  // Try up to 3 times if the AI backend is busy
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      console.log(
+        `Pollinations attempt ${attempt}/3`
+      );
+
+      const result =
+        await generatePollinationsImage(
+          enhancedPrompt,
+          style
+        );
+
+      return result;
+
+    } catch (error) {
+      lastError = error;
+
+      console.error(
+        `Pollinations attempt ${attempt} failed:`,
+        error
+      );
+
+      // Wait before trying again
+      if (attempt < 3) {
+        await sleep(3000);
+      }
+    }
+  }
+
+  // All attempts failed
+  throw new Error(
+    "The free AI image service is temporarily busy. Please try again in a few seconds."
   );
 }

@@ -1,49 +1,56 @@
 import { createServerSupabase } from "./server";
 
 export async function getCurrentUser() {
-  const supabase = await createServerSupabase();
+  try {
+    const supabase = await createServerSupabase();
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-  if (error) {
-    throw error;
-  }
+    // No login = anonymous visitor
+    if (error) {
+      if (
+        error.message === "Auth session missing!" ||
+        error.name === "AuthSessionMissingError"
+      ) {
+        return null;
+      }
 
-  if (!user) {
+      console.error("Auth error:", error);
+      return null;
+    }
+
+    if (!user) {
+      return null;
+    }
+
+    // Get profile
+    const { data: profile, error: profileError } =
+      await supabase
+        .from("profiles")
+        .select("credits, plan")
+        .eq("id", user.id)
+        .single();
+
+    if (profileError) {
+      console.error(
+        "Profile error:",
+        profileError.message
+      );
+
+      return null;
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      credits: profile?.credits ?? 0,
+      plan: profile?.plan ?? "free",
+    };
+  } catch (error) {
+    console.error("getCurrentUser error:", error);
     return null;
   }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan, pro_expires_at, credits")
-    .eq("id", user.id)
-    .single();
-
-  let plan = profile?.plan ?? "free";
-
-  // Automatically downgrade expired Pro users
-  if (
-    plan === "pro" &&
-    profile?.pro_expires_at &&
-    new Date(profile.pro_expires_at) < new Date()
-  ) {
-    await supabase
-      .from("profiles")
-      .update({
-        plan: "free",
-        pro_expires_at: null,
-      })
-      .eq("id", user.id);
-
-    plan = "free";
-  }
-
- return {
-  ...user,
-  plan,
-  credits: profile?.credits ?? 0,
-};
 }

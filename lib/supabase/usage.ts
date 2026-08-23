@@ -1,10 +1,5 @@
 import { createServerSupabase } from "./server";
-
-// ==========================================
-// CONSTANTS
-// ==========================================
-
-const DAILY_LIMIT = 30;
+import { createAdminSupabase } from "./admin";
 
 // ==========================================
 // LOGGED-IN USER USAGE
@@ -31,7 +26,7 @@ export async function getTodayUsage(userId: string) {
   const supabase = await createServerSupabase();
 
   const startOfDay = new Date();
-  startOfDay.setUTCHours(0, 0, 0, 0);
+  startOfDay.setHours(0, 0, 0, 0);
 
   const { count, error } = await supabase
     .from("usage")
@@ -54,10 +49,7 @@ export async function getRemainingUsage(userId: string) {
 
   return {
     used,
-    remaining: Math.max(
-      0,
-      DAILY_LIMIT - used
-    ),
+    remaining: Math.max(0, 30 - used),
   };
 }
 
@@ -65,29 +57,38 @@ export async function getRemainingUsage(userId: string) {
 // ANONYMOUS VISITOR USAGE
 // ==========================================
 
+const ANONYMOUS_DAILY_LIMIT = 30;
 export async function recordAnonymousUsage(
   visitorId: string
 ) {
-  const supabase = await createServerSupabase();
+  const supabase = createAdminSupabase();
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("anonymous_usage")
     .insert({
       visitor_id: visitorId,
-    });
+    })
+    .select();
 
   if (error) {
+    console.error(
+      "Anonymous usage insert error:",
+      error
+    );
+
     throw error;
   }
-}
 
+  return data;
+}
 export async function getAnonymousTodayUsage(
   visitorId: string
 ) {
-  const supabase = await createServerSupabase();
+  const supabase = createAdminSupabase();
 
   const startOfDay = new Date();
-  startOfDay.setUTCHours(0, 0, 0, 0);
+
+  startOfDay.setHours(0, 0, 0, 0);
 
   const { count, error } = await supabase
     .from("anonymous_usage")
@@ -102,6 +103,11 @@ export async function getAnonymousTodayUsage(
     );
 
   if (error) {
+    console.error(
+      "Anonymous usage read error:",
+      error
+    );
+
     throw error;
   }
 
@@ -120,7 +126,7 @@ export async function getAnonymousRemainingUsage(
     used,
     remaining: Math.max(
       0,
-      DAILY_LIMIT - used
+      ANONYMOUS_DAILY_LIMIT - used
     ),
   };
 }
