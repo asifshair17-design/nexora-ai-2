@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
+import { createAdminSupabase } from "@/lib/supabase/admin";
 
 export async function saveGeneratedImage(
   userId: string,
@@ -44,7 +45,6 @@ export async function saveGeneratedImage(
 
   return publicUrl;
 }
-
 // ==========================================
 // ANONYMOUS IMAGE
 // ==========================================
@@ -53,7 +53,8 @@ export async function saveAnonymousGeneratedImage(
   visitorId: string,
   imageBuffer: Buffer
 ) {
-  const supabase = await createServerSupabase();
+  // Use service role for anonymous uploads
+  const supabase = createAdminSupabase();
 
   const fileName =
     `anonymous/${visitorId}/${Date.now()}.webp`;
